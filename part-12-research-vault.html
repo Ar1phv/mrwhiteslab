@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Research Vault · Mr White's Lab</title>
+<meta name="description" content="Restaking, intents, ZK proofs, account abstraction. The advanced layer, no hand holding.">
+
+<meta property="og:title" content="The Research Vault · Mr White's Lab">
+<meta property="og:description" content="Restaking, intents, ZK proofs, account abstraction. The advanced layer, no hand holding.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Research Vault · Mr White's Lab">
+<meta name="twitter:description" content="Restaking, intents, ZK proofs, account abstraction. The advanced layer, no hand holding.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+  .hero { padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(46px, 8.4vw, 100px); line-height: 0.92; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 90px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 4vw, 38px); text-transform: uppercase; line-height: 1.05; margin-bottom: 22px; max-width: 560px; }
+  .block p { font-size: 16.5px; color: #D8D8D2; margin-bottom: 16px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+  .vault-note { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.04em; margin-top: 10px; }
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5.5vw, 52px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } section.block { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · WEB3, PLAINLY STATED</div>
+  <div class="nav-progress">PART 12 OF 12 · VAULT</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE GUIDE · PART TWELVE · GO DEEPER</span>
+  <h1>The Research Vault</h1>
+  <p class="sub">The advanced layer, for enthusiasts who've cleared the curated path and want the terrain builders actually argue about.</p>
+  <p class="lede">Everything up to here was built for someone learning this industry from zero. This part isn't. <strong>No hand holding past this point.</strong> Six subjects, dense, meant as a launchpad for your own research, not a full explainer for each.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">RESTAKING</span><span>·</span><span>INTENTS</span><span>·</span>
+    <span class="hit">ZK PROOFS</span><span>·</span><span>ACCOUNT ABSTRACTION</span><span>·</span>
+    <span class="hit">TOKENOMICS</span><span>·</span><span>CROSS CHAIN</span><span>·</span>
+    <span class="hit">RESTAKING</span><span>·</span><span>INTENTS</span><span>·</span>
+    <span class="hit">ZK PROOFS</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="restaking">
+    <span class="block-mark">01 · RESTAKING</span>
+    <h2>Your staked collateral, working a second job.</h2>
+    <p><span class="term">Restaking</span> lets an asset already staked to secure one network, Ethereum's base layer for example, also be pledged to secure additional protocols simultaneously, earning extra yield in exchange for extra slashing risk. It multiplies capital efficiency and multiplies systemic risk in the same motion, a failure in one restaked protocol can now threaten the validator's stake, and by extension the base chain's security, in a way that didn't exist before this primitive.</p>
+    <p class="vault-note">Start here: EigenLayer's documentation, and any independent analysis of its slashing conditions and shared security assumptions.</p>
+  </section>
+
+  <section class="block" id="intents">
+    <span class="block-mark">02 · INTENTS</span>
+    <h2>Stating what you want, not how to get it.</h2>
+    <p>An <span class="term">intent based</span> architecture flips the standard transaction model. Instead of specifying the exact execution path, swap on this pool, at this price, through this route, you declare the outcome you want, and a network of solvers competes to find and execute the best path to deliver it. This shifts complexity off the user and onto specialized infrastructure, at the cost of introducing a new trust layer, the solvers themselves, and new questions about how fairly they compete.</p>
+    <p class="vault-note">Start here: how UniswapX and CoW Protocol implement solver competition, and where MEV protection actually sits in each design.</p>
+  </section>
+
+  <section class="block" id="zk">
+    <span class="block-mark">03 · ZERO KNOWLEDGE PROOFS</span>
+    <h2>Proving something is true without revealing why.</h2>
+    <p>A <span class="term">zero knowledge proof</span> lets one party prove a statement is true to another party without revealing any information beyond the statement's validity itself. Applied to blockchains, this powers zk rollups, batching thousands of transactions and proving their correctness with a single, compact proof the base chain can verify quickly, and privacy preserving applications that let you prove eligibility, solvency, or identity without exposing the underlying data.</p>
+    <p class="vault-note">Start here: the difference between zk rollups and optimistic rollups, and why proof generation time is still the primary bottleneck most teams are racing to solve.</p>
+  </section>
+
+  <section class="block" id="aa">
+    <span class="block-mark">04 · ACCOUNT ABSTRACTION</span>
+    <h2>Making wallets programmable, not just custodial.</h2>
+    <p><span class="term">Account abstraction</span> turns a wallet from a simple key holder into a programmable smart contract account, enabling social recovery without a single seed phrase as the only failsafe, spending limits, gasless transactions paid by a third party, and multi factor authorization schemes that don't currently exist in a standard wallet. This directly addresses the seed phrase single point of failure from Part 02, at the cost of added contract complexity and new attack surfaces specific to each implementation.</p>
+    <p class="vault-note">Start here: Ethereum's ERC-4337 standard, and how it differs from account abstraction implementations native to chains like Starknet.</p>
+  </section>
+
+  <section class="block" id="tokenomics">
+    <span class="block-mark">05 · TOKENOMICS DESIGN</span>
+    <h2>Incentive structures that hold up, versus ones that don't.</h2>
+    <p>Real <span class="term">tokenomics design</span> means modeling supply emissions, vesting schedules, and holder incentives against realistic demand scenarios, not against the most optimistic case in the deck. Study vesting cliffs specifically, a large unlock hitting the market with no corresponding demand growth is one of the most predictable, recurring price events in this industry, and it's disclosed publicly in every reputable project's documentation before it happens.</p>
+    <p class="vault-note">Start here: any project's token unlock schedule, cross referenced directly against on chain data showing actual circulating supply versus fully diluted supply.</p>
+  </section>
+
+  <section class="block" id="governance-attacks">
+    <span class="block-mark">06 · GOVERNANCE ATTACK VECTORS</span>
+    <h2>When voting power becomes the exploit itself.</h2>
+    <p>Building on Part 07, a <span class="term">governance attack</span> exploits the voting mechanism directly, accumulating enough tokens, often through a flash loan for the duration of a single vote, to push through a malicious proposal before anyone can react, then reversing the position immediately after. Defenses include time delays between a proposal passing and its execution, giving the community a window to react, and snapshot based voting that uses historical token balances instead of balances at the moment of the vote.</p>
+    <p class="vault-note">Start here: the Beanstalk Farms governance exploit, a documented case study in exactly this attack executed in a single transaction.</p>
+  </section>
+
+  <div class="punchline">This vault isn't the finish line. It's the reading list for everything you now know enough to actually understand.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">Twelve parts.<br>Zero filler.<br>Now go <span class="acid">build</span> your edge.</p>
+  <p>That's the full series. If it earned a follow, I'm at the link below, same standard, mechanism first, every time.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-11-where-this-goes.html">← PART 11, WHERE THIS GOES</a>
+    <a class="next-link" href="part-00-author.html">BACK TO START · AUTHOR'S PAGE →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This vault covered <span class="term mono">restaking</span>, <span class="term mono">intents</span>, <span class="term mono">zero knowledge proofs</span>, <span class="term mono">account abstraction</span>, <span class="term mono">tokenomics design</span>, and <span class="term mono">governance attacks</span>. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 12 OF 12 · THE RESEARCH VAULT</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

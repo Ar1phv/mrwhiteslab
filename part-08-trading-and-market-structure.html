@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading And Market Structure · Mr White's Lab</title>
+<meta name="description" content="MEV, perpetuals, oracles, and how price actually forms on chain.">
+
+<meta property="og:title" content="Trading And Market Structure · Mr White's Lab">
+<meta property="og:description" content="MEV, perpetuals, oracles, and how price actually forms on chain.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Trading And Market Structure · Mr White's Lab">
+<meta name="twitter:description" content="MEV, perpetuals, oracles, and how price actually forms on chain.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+  .hero { padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 8vw, 96px); line-height: 0.94; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 110px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 4.6vw, 44px); text-transform: uppercase; line-height: 1.05; margin-bottom: 26px; max-width: 560px; }
+  .block p { font-size: 17px; color: #D8D8D2; margin-bottom: 18px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 18px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 30px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--hairline); margin: 32px 0; border: 1px solid var(--hairline); }
+  .compare-col { background: var(--panel); padding: 24px 20px; }
+  .compare-col h3 { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--acid); letter-spacing: 0.08em; margin-bottom: 14px; text-transform: uppercase; }
+  .compare-col p { font-size: 14.5px; color: var(--ash); margin-bottom: 0; }
+  @media (max-width: 620px) { .compare { grid-template-columns: 1fr; } }
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5.5vw, 52px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } section.block { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · WEB3, PLAINLY STATED</div>
+  <div class="nav-progress">PART 08 OF 12</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE GUIDE · PART EIGHT</span>
+  <h1>Trading And Market Structure</h1>
+  <p class="sub">How price actually forms on chain, and what changes when there's no exchange in the middle.</p>
+  <p class="lede">Trading on chain looks similar to trading on a centralized exchange from the outside, a chart, an order button, a fill. Underneath, almost everything about <strong>how the trade actually executes</strong> is different. That difference is where both the opportunity and the risk live.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">ORDER BOOK</span><span>·</span><span>MEV</span><span>·</span>
+    <span class="hit">PERPETUAL</span><span>·</span><span>ORACLE</span><span>·</span>
+    <span class="hit">LEVERAGE</span><span>·</span><span>SLIPPAGE</span><span>·</span>
+    <span class="hit">ORDER BOOK</span><span>·</span><span>MEV</span><span>·</span>
+    <span class="hit">PERPETUAL</span><span>·</span><span>ORACLE</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="cex-dex">
+    <span class="block-mark">01 · CUSTODY IS THE REAL DIFFERENCE</span>
+    <h2>Same chart. Completely different risk underneath it.</h2>
+    <p>A <span class="term">CEX</span>, centralized exchange, holds your funds in custody while you trade, matching orders internally, off chain, and only touching the blockchain when you deposit or withdraw. Fast, familiar, and entirely dependent on the exchange's solvency and honesty, a dependency that has failed catastrophically before.</p>
+    <p>On chain trading settles every transaction directly on the ledger, no intermediary holding your funds between trades. You keep custody the entire time. The tradeoff is that every trade now costs gas, moves at the chain's speed, and is visible to anyone watching the mempool before it's even confirmed.</p>
+    <div class="compare">
+      <div class="compare-col"><h3>Centralized</h3><p>Fast, deep liquidity, custody risk, dependent on the exchange staying solvent and honest.</p></div>
+      <div class="compare-col"><h3>On Chain</h3><p>Self custodied the entire time, fully transparent, exposed to gas costs and public mempool visibility.</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="mev">
+    <span class="block-mark">02 · MEV, THE TAX YOU DON'T SEE COMING</span>
+    <h2>Someone can see your trade before it lands.</h2>
+    <p>Before your on chain transaction is confirmed, it sits briefly in a public queue called the <span class="term">mempool</span>, visible to anyone running the right software. This visibility created an entire discipline called <span class="term">MEV</span>, maximal extractable value, where bots detect a pending trade and insert their own transactions immediately before and after it to profit from the price movement your trade is about to cause.</p>
+    <p class="callout">This isn't hacking, it's exploiting a structural feature of public, ordered transactions. Some chains and tools now offer private transaction submission specifically to reduce this exposure. Know whether the chain or wallet you're using has any MEV protection before executing large trades.</p>
+  </section>
+
+  <section class="block" id="perps">
+    <span class="block-mark">03 · PERPETUALS AND LEVERAGE ON CHAIN</span>
+    <h2>Borrowed size, no expiry date, and an oracle deciding your fate.</h2>
+    <p>A <span class="term">perpetual</span> contract lets you take a leveraged long or short position on an asset without an expiry date, unlike traditional futures. On chain perps rely on a <span class="term">funding rate</span> mechanism, a periodic payment between long and short holders, to keep the contract's price tethered to the actual spot price.</p>
+    <p>These contracts depend entirely on an <span class="term">oracle</span>, a service feeding real world price data onto the chain, because the blockchain itself has no native awareness of external prices. A manipulated or lagging oracle has been the root cause of real exploits and unfair liquidations. Chains built specifically for trading, Injective among the clearest examples, invest heavily in oracle reliability and speed for exactly this reason, because the entire product fails if the price feed can't be trusted.</p>
+  </section>
+
+  <section class="block" id="liquidity-depth">
+    <span class="block-mark">04 · LIQUIDITY DEPTH, THE NUMBER THAT ACTUALLY PROTECTS YOU</span>
+    <h2>Price only means something if you can actually get it.</h2>
+    <p>A displayed price is meaningless without checking how much size can trade at or near it. Thin books and shallow pools mean your own order moves the price against you before it fully fills, the slippage mechanic from Part 05, now applied to leveraged and larger size trades where it hurts considerably more.</p>
+    <p>Before sizing any position, check depth at your intended size, not just the headline price. This single habit prevents more losses than any indicator or strategy.</p>
+  </section>
+
+  <div class="punchline">On chain, the price you see and the price you get are two different questions. Always check both.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">Transparency cuts<br>both ways. It protects<br>you and <span class="acid">exposes</span> you.</p>
+  <p>Part 09 is the one I know best. The creator and BD economy in web3, how attention actually converts into protocol growth, and what separates a real campaign from noise.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-07-daos-and-coordination.html">← PART 07, DAOS AND COORDINATION</a>
+    <a class="next-link" href="part-09-creator-and-bd-economy.html">NEXT · PART 09 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part covered <span class="term mono">MEV</span>, <span class="term mono">perpetuals</span>, <span class="term mono">oracles</span>, and why liquidity depth matters more than the price you see. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 08 OF 12 · TRADING AND MARKET STRUCTURE</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

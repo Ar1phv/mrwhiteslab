@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAOs And Coordination · Mr White's Lab</title>
+<meta name="description" content="How decisions get made with no CEO signing off, and where it actually breaks.">
+
+<meta property="og:title" content="DAOs And Coordination · Mr White's Lab">
+<meta property="og:description" content="How decisions get made with no CEO signing off, and where it actually breaks.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DAOs And Coordination · Mr White's Lab">
+<meta name="twitter:description" content="How decisions get made with no CEO signing off, and where it actually breaks.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+  .hero { padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 9vw, 108px); line-height: 0.92; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 110px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 4.6vw, 44px); text-transform: uppercase; line-height: 1.05; margin-bottom: 26px; max-width: 560px; }
+  .block p { font-size: 17px; color: #D8D8D2; margin-bottom: 18px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 18px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 30px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5.5vw, 52px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } section.block { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · WEB3, PLAINLY STATED</div>
+  <div class="nav-progress">PART 07 OF 12</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE GUIDE · PART SEVEN</span>
+  <h1>DAOs And Coordination</h1>
+  <p class="sub">How decisions actually get made when there's no CEO signing off.</p>
+  <p class="lede">A <strong>DAO</strong>, a decentralized autonomous organization, is a group that coordinates and allocates resources through code and collective voting, instead of a board and an executive chain of command. The idea is compelling. The execution, in most cases, is messier than the pitch deck ever admits.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">GOVERNANCE</span><span>·</span><span>QUORUM</span><span>·</span>
+    <span class="hit">TREASURY</span><span>·</span><span>PROPOSAL</span><span>·</span>
+    <span class="hit">MULTISIG</span><span>·</span><span>DELEGATION</span><span>·</span>
+    <span class="hit">GOVERNANCE</span><span>·</span><span>QUORUM</span><span>·</span>
+    <span class="hit">TREASURY</span><span>·</span><span>PROPOSAL</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="what">
+    <span class="block-mark">01 · WHAT A DAO ACTUALLY REPLACES</span>
+    <h2>Not a company. A coordination layer for one.</h2>
+    <p>A DAO typically holds a shared <span class="term">treasury</span>, funds controlled collectively rather than by one individual, governed through token based or reputation based voting on how those funds get spent. Members submit <span class="term">proposals</span>, the community votes, and if the proposal passes a required <span class="term">quorum</span>, minimum participation threshold, it executes, often automatically through code.</p>
+    <p>What it actually replaces isn't the entire company. It replaces the trust requirement in one specific function, treasury control. Everything else, the actual building, marketing, and community management, still needs real humans doing real work. A DAO with no active contributors is just a wallet with a voting interface attached.</p>
+  </section>
+
+  <section class="block" id="mechanics">
+    <span class="block-mark">02 · HOW VOTING POWER ACTUALLY DISTRIBUTES</span>
+    <h2>One token, one vote, sounds fair until you check the wallet list.</h2>
+    <p>Most DAOs weight voting power by token holdings. Sounds democratic. In practice it means whoever holds the most tokens holds the most control, which is closer to a shareholder structure than a democracy. Check the actual token distribution before assuming a DAO is meaningfully decentralized, a handful of wallets controlling majority voting power is common, not rare.</p>
+    <p>Some DAOs use <span class="term">delegation</span>, letting token holders assign their voting power to an active participant they trust to vote on their behalf, similar to representative democracy. This solves the problem of most holders never actually voting, at the cost of concentrating real influence in a smaller set of delegates.</p>
+  </section>
+
+  <section class="block" id="multisig">
+    <span class="block-mark">03 · MULTISIG, WHERE THE THEORY MEETS PRACTICE</span>
+    <h2>The treasury key that needs several signatures, not one.</h2>
+    <p>Between "the DAO decided" and "the treasury moved," there's almost always a <span class="term">multisig wallet</span>, requiring multiple designated signers, often a small trusted group, to approve any transaction before it executes. This exists for good reason, preventing a single compromised key from draining the entire treasury.</p>
+    <p class="callout">This is also where the "decentralized" label gets stretched thinnest. A DAO whose entire treasury moves on the approval of five known signers is decentralized in governance discussion, centralized in actual execution. Neither framing is wrong. Know which one you're evaluating.</p>
+  </section>
+
+  <section class="block" id="failure">
+    <span class="block-mark">04 · WHERE DAOS ACTUALLY BREAK</span>
+    <h2>Coordination is hard. Code doesn't fix that.</h2>
+    <p>Low voter turnout is close to universal, most token holders never vote, which means quorum requirements often get met by a small, motivated minority, not broad consensus. Governance attacks, where an actor accumulates enough tokens specifically to push through a proposal that benefits them at the treasury's expense, are a documented, recurring failure mode, not a hypothetical.</p>
+    <p>None of this means DAOs are a failed idea. It means the coordination problem they're solving is genuinely hard, and code enforces the voting mechanism without fixing the human incentive problems underneath it. Evaluate a DAO on its actual voter participation and treasury history, not its governance token's price.</p>
+  </section>
+
+  <div class="punchline">A DAO is only as decentralized as its weakest concentration of power. Go find it before you trust it.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">Governance on<br>paper. Power in<br>the <span class="acid">wallet list</span>.</p>
+  <p>Part 08 moves into trading and market structure, how price actually forms on chain, and what changes when there's no exchange sitting in the middle.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-06-nfts-beyond-jpegs.html">← PART 06, NFTS BEYOND JPEGS</a>
+    <a class="next-link" href="part-08-trading-and-market-structure.html">NEXT · PART 08 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part covered <span class="term mono">DAO governance</span>, <span class="term mono">treasury control</span>, <span class="term mono">multisig</span>, and where decentralized coordination actually breaks. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 07 OF 12 · DAOS AND COORDINATION</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

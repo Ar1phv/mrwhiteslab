@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Where This Goes · Mr White's Lab</title>
+<meta name="description" content="Real world assets, on chain identity, and AI agents transacting on chain.">
+
+<meta property="og:title" content="Where This Goes · Mr White's Lab">
+<meta property="og:description" content="Real world assets, on chain identity, and AI agents transacting on chain.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Where This Goes · Mr White's Lab">
+<meta name="twitter:description" content="Real world assets, on chain identity, and AI agents transacting on chain.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+  .hero { padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 9vw, 108px); line-height: 0.92; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 110px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 4.6vw, 44px); text-transform: uppercase; line-height: 1.05; margin-bottom: 26px; max-width: 560px; }
+  .block p { font-size: 17px; color: #D8D8D2; margin-bottom: 18px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 18px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 30px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5.5vw, 52px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } section.block { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · WEB3, PLAINLY STATED</div>
+  <div class="nav-progress">PART 11 OF 12</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE GUIDE · PART ELEVEN · CLOSING THE CORE SERIES</span>
+  <h1>Where This Goes</h1>
+  <p class="sub">Real world assets, on chain identity, and AI agents transacting without a human clicking approve.</p>
+  <p class="lede">Ten parts behind you now cover everything currently live and working. This part is different, it's a forecast, not a manual. <strong>Read it as direction, not certainty.</strong> Nobody, including me, gets to claim certainty about where any of this lands.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">TOKENIZATION</span><span>·</span><span>RWA</span><span>·</span>
+    <span class="hit">IDENTITY</span><span>·</span><span>AGENTS</span><span>·</span>
+    <span class="hit">AUTONOMY</span><span>·</span><span>SETTLEMENT</span><span>·</span>
+    <span class="hit">TOKENIZATION</span><span>·</span><span>RWA</span><span>·</span>
+    <span class="hit">IDENTITY</span><span>·</span><span>AGENTS</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="rwa">
+    <span class="block-mark">01 · REAL WORLD ASSETS, THE THESIS FROM PART 01, SCALED UP</span>
+    <h2>If a stablecoin can tokenize a dollar, what else tokenizes.</h2>
+    <p><span class="term">RWA tokenization</span> means representing ownership of something that exists off chain, treasury bonds, real estate, private credit, commodities, as a token that can move, settle, and be held with the same mechanics covered in Part 01. The value proposition is identical to the stablecoin thesis, faster settlement, fractional ownership, and programmable compliance built directly into the asset instead of layered on top of it afterward.</p>
+    <p>The hard part was never the tokenization itself. It's the legal bridge, proving the on chain token has an enforceable claim to the actual off chain asset, and that claim holds up when it's tested. Watch which RWA projects can demonstrate real legal enforceability, not just a smart contract that mints a number.</p>
+  </section>
+
+  <section class="block" id="identity">
+    <span class="block-mark">02 · ON CHAIN IDENTITY, BUILT ON THE SOULBOUND MODEL</span>
+    <h2>Reputation that follows you, that nobody can buy.</h2>
+    <p>Part 06 introduced soulbound tokens. The natural extension is a full <span class="term">on chain identity</span> layer, credentials, work history, reputation scores, and verified credentials that persist across every application you touch, owned by you instead of siloed inside one platform's database. This is the direction Verity is actually built toward, a conviction scoring layer that other protocols can plug into rather than each one rebuilding trust from zero.</p>
+    <p>The obstacle is coordination, not technology. The mechanic has worked for years. What's missing is enough applications agreeing to read from the same identity layer instead of building their own closed version. That's a business problem now, not an engineering one.</p>
+  </section>
+
+  <section class="block" id="agents">
+    <span class="block-mark">03 · AGENTS THAT HOLD WALLETS AND TRANSACT DIRECTLY</span>
+    <h2>The next wallet holder might not be a person.</h2>
+    <p>Every mechanic in this guide, keys, signatures, gas, was described as something a human operates. That assumption is already starting to break. <span class="term">AI agents</span> that hold their own wallet, evaluate an opportunity, and execute a transaction autonomously, within limits a human defined in advance, are moving from experiment to early production. Machine to machine payments, without a person clicking approve on each individual transaction.</p>
+    <p class="callout">This is precisely why the custody and signing discipline from Part 02 matters more, not less, going forward. An agent with unlimited spending approval is a drainer exploit with extra steps, if the permission boundaries aren't defined correctly from the start.</p>
+    <p>Expect this to arrive first in narrow, well bounded use cases, an agent managing a fixed budget for a specific recurring task, before it arrives anywhere near open ended autonomous spending. Trust gets built incrementally here, the same way it did for every mechanic in this guide.</p>
+  </section>
+
+  <div class="punchline">The next decade of this industry is the same thesis from Part 01, applied to everything that hasn't been tokenized yet.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">You've read<br>the whole map.<br>Now go <span class="acid">operate</span>.</p>
+  <p>That closes the core series. Part 12 is the research vault, the advanced layer for anyone who wants to go past the curated path into restaking, intents, account abstraction, and the mechanics builders actually argue about.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-10-security-deep-dive.html">← PART 10, SECURITY DEEP DIVE</a>
+    <a class="next-link" href="part-12-research-vault.html">NEXT · PART 12, RESEARCH VAULT →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part covered <span class="term mono">RWA tokenization</span>, <span class="term mono">on chain identity</span>, and <span class="term mono">autonomous agents</span> transacting directly on chain. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 11 OF 12 · WHERE THIS GOES</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

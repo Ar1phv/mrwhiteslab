@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mr White's Lab · Web3, Plainly Stated</title>
+<meta name="description" content="A twelve part guide to web3, plus a research vault, written by an operator, not a marketer. No hype. Just mechanism.">
+
+<meta property="og:title" content="Mr White's Lab · Web3, Plainly Stated">
+<meta property="og:description" content="A twelve part guide to web3, plus a research vault. No hype. Just mechanism.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mr White's Lab · Web3, Plainly Stated">
+<meta name="twitter:description" content="A twelve part guide to web3, plus a research vault. No hype. Just mechanism.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav a.author-link { display: inline-block; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: var(--ash); border-bottom: 1px solid var(--hairline); padding: 12px 4px; margin: -12px -4px; }
+  .nav a.author-link:hover { color: var(--acid); border-color: var(--acid); }
+
+  .hero { padding: clamp(70px, 14vh, 150px) clamp(20px, 6vw, 64px) 70px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 9.5vw, 120px); line-height: 0.9; text-transform: uppercase; margin-bottom: 24px; }
+  .hero .sub { font-size: clamp(17px, 2.2vw, 21px); color: var(--ash); max-width: 600px; }
+
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 20px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 44px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+
+  .toc { max-width: 920px; margin: 0 auto; padding: 90px clamp(20px, 6vw, 64px) 60px; }
+  .toc-label { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); margin-bottom: 30px; display: block; }
+
+  .toc-item {
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--hairline);
+    text-decoration: none;
+    transition: padding-left 0.2s ease;
+  }
+  .toc-item:hover { padding-left: 10px; text-decoration: none; }
+  .toc-item:hover .toc-title { color: var(--acid); }
+  .toc-item:hover .toc-arrow { opacity: 1; transform: translateX(0); }
+  .toc-num { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--ash-dim); }
+  .toc-num.author-num { color: var(--acid); }
+  .toc-body { min-width: 0; }
+  .toc-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(22px, 3.4vw, 30px); text-transform: uppercase; color: var(--white); line-height: 1.1; transition: color 0.2s ease; }
+  .toc-desc { font-size: 14px; color: var(--ash); margin-top: 4px; max-width: 480px; }
+  .toc-arrow { font-family: 'Space Mono', monospace; color: var(--acid); font-size: 18px; opacity: 0; transform: translateX(-6px); transition: opacity 0.2s ease, transform 0.2s ease; }
+
+  .vault-item .toc-num { color: var(--acid); }
+
+  .close { max-width: 920px; margin: 0 auto; padding: 40px clamp(20px, 6vw, 64px) 140px; }
+  .close p { color: var(--ash); max-width: 560px; }
+
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+
+  @media (max-width: 560px) {
+    .toc-item { grid-template-columns: 50px 1fr; }
+    .toc-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · WEB3, PLAINLY STATED</div>
+  <a class="author-link" href="part-00-author.html">AUTHOR →</a>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE COMPLETE GUIDE</span>
+  <h1>Web3, Plainly<br>Stated.</h1>
+  <p class="sub">Twelve parts, one research vault. Mechanism first, every time. No hype, no filler, nothing you need a dictionary for.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">TOKENS</span><span>·</span><span>WALLETS</span><span>·</span>
+    <span class="hit">CONSENSUS</span><span>·</span><span>CHAINS</span><span>·</span>
+    <span class="hit">DEFI</span><span>·</span><span>NFTS</span><span>·</span>
+    <span class="hit">DAOS</span><span>·</span><span>TRADING</span><span>·</span>
+    <span class="hit">CREATOR ECONOMY</span><span>·</span><span>SECURITY</span><span>·</span>
+    <span class="hit">THE FUTURE</span><span>·</span><span>THE VAULT</span>
+  </div>
+</div>
+
+<main class="toc">
+  <span class="toc-label">START HERE</span>
+
+  <a class="toc-item" href="part-00-author.html">
+    <span class="toc-num author-num">00</span>
+    <div class="toc-body">
+      <div class="toc-title">Author</div>
+      <div class="toc-desc">Who's writing this, and why it's worth your trust.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-01-value-on-chain.html">
+    <span class="toc-num">01</span>
+    <div class="toc-body">
+      <div class="toc-title">Value On Chain</div>
+      <div class="toc-desc">Tokens, gas, stablecoins. What actually moves, before you learn how it moves.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-02-wallets-and-keys.html">
+    <span class="toc-num">02</span>
+    <div class="toc-body">
+      <div class="toc-title">Wallets And Keys</div>
+      <div class="toc-desc">Custody, seed phrases, and the one mistake that ends people.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-03-blockchains-and-consensus.html">
+    <span class="toc-num">03</span>
+    <div class="toc-body">
+      <div class="toc-title">Blockchains And Consensus</div>
+      <div class="toc-desc">What actually makes one chain different from another.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-04-multichain-map.html">
+    <span class="toc-num">04</span>
+    <div class="toc-body">
+      <div class="toc-title">The Multichain Map</div>
+      <div class="toc-desc">Ethereum, Solana, Injective, XRPL, Cardano, Bitcoin L2s, weighed honestly.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-05-defi-fundamentals.html">
+    <span class="toc-num">05</span>
+    <div class="toc-body">
+      <div class="toc-title">DeFi Fundamentals</div>
+      <div class="toc-desc">DEXs, lending, liquidity, and real yield versus a Ponzi with a UI.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-06-nfts-beyond-jpegs.html">
+    <span class="toc-num">06</span>
+    <div class="toc-body">
+      <div class="toc-title">NFTs Beyond JPEGs</div>
+      <div class="toc-desc">Provenance, royalties, and soulbound assets that can't be bought.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-07-daos-and-coordination.html">
+    <span class="toc-num">07</span>
+    <div class="toc-body">
+      <div class="toc-title">DAOs And Coordination</div>
+      <div class="toc-desc">How decisions get made with no CEO signing off, and where it breaks.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-08-trading-and-market-structure.html">
+    <span class="toc-num">08</span>
+    <div class="toc-body">
+      <div class="toc-title">Trading And Market Structure</div>
+      <div class="toc-desc">MEV, perpetuals, oracles, and how price actually forms on chain.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-09-creator-and-bd-economy.html">
+    <span class="toc-num">09</span>
+    <div class="toc-body">
+      <div class="toc-title">The Creator And BD Economy</div>
+      <div class="toc-desc">How attention converts into growth. Written from the seat, not the sideline.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-10-security-deep-dive.html">
+    <span class="toc-num">10</span>
+    <div class="toc-body">
+      <div class="toc-title">Security Deep Dive</div>
+      <div class="toc-desc">Rug pulls, phishing, exploits, and the discipline that keeps you safe.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-11-where-this-goes.html">
+    <span class="toc-num">11</span>
+    <div class="toc-body">
+      <div class="toc-title">Where This Goes</div>
+      <div class="toc-desc">RWAs, on chain identity, and AI agents transacting on chain.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item vault-item" href="part-12-research-vault.html">
+    <span class="toc-num">12</span>
+    <div class="toc-body">
+      <div class="toc-title">The Research Vault</div>
+      <div class="toc-desc">Restaking, intents, ZK proofs, account abstraction. No hand holding.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+</main>
+
+<div class="close">
+  <p>Read them in order if you're starting from zero. Jump straight to the vault if you're not. Either way, start with Part 01.</p>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      Written by <strong>Mr White</strong>, operator at Outpost, founder of MARK Protocol, co-founder of Verity. Based in Kano, Nigeria. Thirteen parts, one standard, mechanism first.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · WEB3, PLAINLY STATED</div>
+  </div>
+</footer>
+
+</body>
+</html>

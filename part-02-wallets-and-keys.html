@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallets And Keys · Mr White's Lab</title>
+<meta name="description" content="Custody, seed phrases, and the one mistake that ends people in web3.">
+
+<meta property="og:title" content="Wallets And Keys · Mr White's Lab">
+<meta property="og:description" content="Custody, seed phrases, and the one mistake that ends people in web3.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Wallets And Keys · Mr White's Lab">
+<meta name="twitter:description" content="Custody, seed phrases, and the one mistake that ends people in web3.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0A0A0A;
+    --panel: #121212;
+    --panel-raised: #161613;
+    --ash: #8A8A85;
+    --ash-dim: #55554F;
+    --white: #F5F5F0;
+    --acid: #B8FF00;
+    --hairline: #232320;
+    --danger: #FF4D4D;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px clamp(20px, 6vw, 64px);
+    background: rgba(10,10,10,0.88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+
+  .hero {
+    padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-size: clamp(52px, 10vw, 116px); line-height: 0.92; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; font-weight: 400; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 120px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5vw, 48px); text-transform: uppercase; line-height: 1.05; margin-bottom: 28px; max-width: 560px; }
+  .block p { font-size: 17px; color: #D8D8D2; margin-bottom: 20px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 18px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 32px 0; }
+  .block p.warning { color: var(--white); font-size: 17px; padding-left: 20px; border-left: 2px solid var(--danger); margin: 32px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+
+  .data-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; background: var(--hairline); margin: 36px 0; border: 1px solid var(--hairline); }
+  .data-cell { background: var(--panel); padding: 22px 18px; }
+  .data-cell .num { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--acid); display: block; }
+  .data-cell .label { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--ash); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .checklist { border: 1px solid var(--hairline); margin: 36px 0; }
+  .check-row { display: flex; gap: 16px; padding: 18px 20px; border-bottom: 1px solid var(--hairline); align-items: flex-start; }
+  .check-row:last-child { border-bottom: none; }
+  .check-mark { font-family: 'Space Mono', monospace; color: var(--acid); font-size: 14px; padding-top: 2px; }
+  .check-text { font-size: 15.5px; color: #D8D8D2; }
+  .check-text strong { color: var(--white); }
+
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(34px, 6vw, 56px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; margin-right: 14px; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    section.block { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · WEB3, PLAINLY STATED</div>
+  <div class="nav-progress">PART 02 OF 12</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE GUIDE · PART TWO</span>
+  <h1>Wallets<br>And Keys</h1>
+  <p class="sub">Where custody actually lives, and the one mistake that has ended more people than any hack.</p>
+  <p class="lede">Part 01 covered what moves. This part covers <strong>who's allowed to move it</strong>. A wallet is not an account. Nobody can freeze it, reset your password, or reverse a mistake. That freedom is the entire pitch of this industry, and it's also the entire risk. Read this one carefully.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">PRIVATE KEY</span><span>·</span>
+    <span>PUBLIC ADDRESS</span><span>·</span>
+    <span class="hit">SEED PHRASE</span><span>·</span>
+    <span>SIGNATURE</span><span>·</span>
+    <span class="hit">CUSTODY</span><span>·</span>
+    <span>RECOVERY</span><span>·</span>
+    <span class="hit">PRIVATE KEY</span><span>·</span>
+    <span>PUBLIC ADDRESS</span><span>·</span>
+    <span class="hit">SEED PHRASE</span><span>·</span>
+    <span>SIGNATURE</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="wallet">
+    <span class="block-mark">01 · WHAT A WALLET ACTUALLY IS</span>
+    <h2>It doesn't hold your coins. It holds your keys.</h2>
+    <p>Common mistake, even among people who've been in this space a year. A wallet feels like a bank account, a container holding your balance. It isn't. Your balance lives on the chain, in the ledger we covered in Part 01. A <span class="term">wallet</span> is just software that holds the <span class="term">keys</span> that prove the balance is yours and lets you authorize changes to it.</p>
+    <p>Delete the wallet app and your funds don't disappear. They're still sitting in the ledger, exactly where they were. What you lose is the ability to prove they're yours and act on that ownership. That distinction is the single most important thing in this entire part.</p>
+    <p class="callout">A wallet is a key manager wearing a friendly interface. Everything else, the balances, the swap buttons, the NFT gallery, is decoration on top of that one function.</p>
+  </section>
+
+  <section class="block" id="keys">
+    <span class="block-mark">02 · PRIVATE KEYS, PUBLIC KEYS, ADDRESSES</span>
+    <h2>One secret. One signature. One proof.</h2>
+    <p>Every wallet is built on a pair of mathematically linked numbers. A <span class="term">private key</span>, which you never share, ever, under any circumstance. And a <span class="term">public key</span>, derived from it, which you can share freely, it's what your <span class="term">address</span> is built from.</p>
+    <p>The relationship is one directional by design. Anyone can derive your public address from your private key. Nobody can reverse the process and derive your private key from your public address. That asymmetry is the entire foundation of self custody. It's the same math that lets you prove you own something without ever revealing the secret that proves it.</p>
+    <p>When you send a transaction, your wallet uses your private key to produce a <span class="term">signature</span>, a piece of cryptographic proof that says this specific action was authorized by whoever holds this specific key. The network checks the signature against your public address. Match, it executes. No match, it's rejected. No customer service line involved anywhere in that process.</p>
+  </section>
+
+  <section class="block" id="seed">
+    <span class="block-mark">03 · THE SEED PHRASE</span>
+    <h2>Twelve or twenty four words. That's the whole vault.</h2>
+    <p>Your private key isn't something you memorize as a string of characters. It's generated from a <span class="term">seed phrase</span>, a sequence of ordinary words, typically 12 or 24, pulled from a standardized list. That phrase can regenerate every key, every wallet, every address tied to it, on any device, anywhere, forever.</p>
+    <p>Sit with that for a second. Whoever holds those words holds everything. Not a password that can be reset. Not an account that can be recovered through a support ticket. The words are the account. Anyone who sees them, photographs them, or tricks you into typing them into the wrong place now has full and permanent access to everything that phrase controls.</p>
+    <div class="data-strip">
+      <div class="data-cell"><span class="num">12</span><span class="label">Or 24 word standard, BIP39 wordlist</span></div>
+      <div class="data-cell"><span class="num">0</span><span class="label">Support lines that can recover it for you</span></div>
+      <div class="data-cell"><span class="num">∞</span><span class="label">Wallets it can regenerate, forever</span></div>
+    </div>
+    <p class="warning">Never type your seed phrase into a website. Never screenshot it. Never store it in a notes app, an email draft, or a cloud backup. No legitimate wallet, exchange, or support agent will ever ask you for it. That single sentence, understood and obeyed, prevents most of the losses in this entire industry.</p>
+  </section>
+
+  <section class="block" id="custody">
+    <span class="block-mark">04 · CUSTODIAL VS NON CUSTODIAL</span>
+    <h2>Someone always holds the keys. Ask who.</h2>
+    <p>A <span class="term">custodial wallet</span>, the kind you get by default on most centralized exchanges, means the platform holds your private keys on your behalf. Convenient. Familiar. Password reset actually works. But you don't actually control the asset, you have a claim on it, backed by the platform's honesty and solvency.</p>
+    <p>A <span class="term">non custodial wallet</span> means you, and only you, hold the keys. Full control, full responsibility, zero recourse if something goes wrong. This is the model this entire guide is built around, because it's the model that makes the thesis from Part 01 actually true. Permissionless only means something if nobody can take permission away from you.</p>
+    <p class="callout">Not your keys, not your coins. It's a cliché because it's correct. If you can't export the private key or seed phrase, you don't own the asset. You own a promise that someone else will let you access it.</p>
+  </section>
+
+  <section class="block" id="hotcold">
+    <span class="block-mark">05 · HOT WALLETS VS COLD WALLETS</span>
+    <h2>Convenience and security sit on opposite ends.</h2>
+    <p>A <span class="term">hot wallet</span> is connected to the internet. Browser extensions, mobile apps. Fast, easy, exactly what you want for daily transactions and small balances. Also the most exposed surface in your entire setup, reachable by any malicious website, extension, or app with the right exploit.</p>
+    <p>A <span class="term">cold wallet</span> keeps your private keys on a device that never touches the internet, a hardware wallet, signing transactions offline and only broadcasting the already signed result. Slower, less convenient, and the correct home for anything you're not actively using.</p>
+    <p>Operators who've been in this space long enough run both, deliberately. Hot wallet for daily activity, small amounts you can afford to lose to a mistake. Cold wallet for anything that would actually hurt to lose. Splitting exposure isn't paranoia. It's position sizing applied to risk instead of just to trades.</p>
+  </section>
+
+  <section class="block" id="signing">
+    <span class="block-mark">06 · SIGNING IS THE REAL RISK, NOT SENDING</span>
+    <h2>"Connect wallet" is not the dangerous part. Signing is.</h2>
+    <p>People treat wallet connection as the moment of risk. It isn't, mostly. Connecting shows a site your public address, which is already visible on chain to anyone looking. The actual risk sits in every <span class="term">signature request</span> that follows. Every popup asking you to approve something is a request to authorize an action with your key.</p>
+    <p>This is where <span class="term">approval exploits</span> and drainer contracts live. A malicious site asks you to sign something that looks like a routine transaction but actually grants unlimited spending permission over a token, or transfers an NFT, or approves a contract to move funds on your behalf indefinitely. You signed it. The network doesn't ask why. It just executes.</p>
+    <div class="checklist">
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Read what you're signing.</strong> If the wallet shows a plain description, read it before approving, every time, no exceptions for sites you trust.</div></div>
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Be suspicious of "unlimited approval."</strong> Legitimate actions rarely need unlimited spending rights. Limit approvals to the exact amount when the option exists.</div></div>
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Revoke old approvals.</strong> Every contract you've ever approved still has standing permission until you manually revoke it. Old, forgotten approvals are a live attack surface sitting on your wallet right now.</div></div>
+    </div>
+  </section>
+
+  <section class="block" id="mistake">
+    <span class="block-mark">07 · THE MISTAKE THAT ENDS PEOPLE</span>
+    <h2>Not the exploit. The panic.</h2>
+    <p>The biggest losses in this industry rarely come from sophisticated hacks. They come from urgency. A fake support agent in your DMs during a moment of confusion. A too good to be true airdrop that needs your seed phrase to "verify eligibility." A cloned website, pixel identical to the real one, one letter off in the URL, timed to catch you when you're moving fast and not checking closely.</p>
+    <p>Every one of these attacks depends on the same thing, getting you to act before you think. Slow down whenever a wallet interaction feels urgent, unexpected, or too generous. That single habit, more than any tool or hardware device, is what actually keeps operators safe long term.</p>
+  </section>
+
+  <div class="punchline">Your key proves ownership. Your discipline is what keeps it yours.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">Custody is <span class="acid">control</span>.<br>Control is<br>a responsibility.</p>
+  <p>Part 03 goes into blockchains and consensus. What actually makes one chain different from another, stripped of marketing language and reduced to mechanism.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-01-value-on-chain.html">← PART 01, VALUE ON CHAIN</a>
+    <a class="next-link" href="part-03-blockchains-and-consensus.html">NEXT · PART 03 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part covered <span class="term mono">private keys</span>, <span class="term mono">seed phrases</span>, <span class="term mono">custody</span>, and <span class="term mono">signing</span>, the mechanics that decide who actually controls your assets. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 02 OF 12 · WALLETS AND KEYS</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

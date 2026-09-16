@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeFi Fundamentals · Mr White's Lab</title>
+<meta name="description" content="DEXs, lending, liquidity, and how to tell real yield from a Ponzi with a nice interface.">
+
+<meta property="og:title" content="DeFi Fundamentals · Mr White's Lab">
+<meta property="og:description" content="DEXs, lending, liquidity, and how to tell real yield from a Ponzi with a nice interface.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DeFi Fundamentals · Mr White's Lab">
+<meta name="twitter:description" content="DEXs, lending, liquidity, and how to tell real yield from a Ponzi with a nice interface.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; --danger: #FF4D4D; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+  .hero { padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 9vw, 108px); line-height: 0.92; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 110px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 4.6vw, 44px); text-transform: uppercase; line-height: 1.05; margin-bottom: 26px; max-width: 560px; }
+  .block p { font-size: 17px; color: #D8D8D2; margin-bottom: 18px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 18px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 30px 0; }
+  .block p.warning { color: var(--white); font-size: 17px; padding-left: 20px; border-left: 2px solid var(--danger); margin: 30px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+  .checklist { border: 1px solid var(--hairline); margin: 32px 0; }
+  .check-row { display: flex; gap: 16px; padding: 18px 20px; border-bottom: 1px solid var(--hairline); align-items: flex-start; }
+  .check-row:last-child { border-bottom: none; }
+  .check-mark { font-family: 'Space Mono', monospace; color: var(--acid); font-size: 14px; padding-top: 2px; }
+  .check-text { font-size: 15.5px; color: #D8D8D2; }
+  .check-text strong { color: var(--white); }
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5.5vw, 52px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } section.block { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · WEB3, PLAINLY STATED</div>
+  <div class="nav-progress">PART 05 OF 12</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE GUIDE · PART FIVE</span>
+  <h1>DeFi Fundamentals</h1>
+  <p class="sub">DEXs, lending, liquidity, and how to tell real yield from a Ponzi with a nice interface.</p>
+  <p class="lede">DeFi means decentralized finance. It means the same financial primitives that already exist, trading, lending, borrowing, rebuilt as open code instead of gated institutions. Some of it is genuinely revolutionary. A lot of it is <strong>old fraud wearing a new interface</strong>. This part teaches you to tell the difference.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">LIQUIDITY</span><span>·</span><span>AMM</span><span>·</span>
+    <span class="hit">YIELD</span><span>·</span><span>COLLATERAL</span><span>·</span>
+    <span class="hit">SLIPPAGE</span><span>·</span><span>APY</span><span>·</span>
+    <span class="hit">LIQUIDITY</span><span>·</span><span>AMM</span><span>·</span>
+    <span class="hit">YIELD</span><span>·</span><span>COLLATERAL</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="dex">
+    <span class="block-mark">01 · DECENTRALIZED EXCHANGES</span>
+    <h2>No order book operator. Just a formula.</h2>
+    <p>A <span class="term">DEX</span> lets you swap one token for another without a company sitting in the middle holding custody of your funds. Most run on an <span class="term">Automated Market Maker</span> model, a pool of two assets, priced against each other by a formula, not by matching individual buyers to sellers.</p>
+    <p>You trade directly against the pool. The price moves as the ratio inside it shifts. This is why large trades against thin pools cause <span class="term">slippage</span>, the price moving against you mid trade because you're changing the ratio yourself. Check pool depth before sizing a trade, not after.</p>
+    <p>Some ecosystems run true on chain order books instead of AMMs, Injective's native order book being the clearest example, giving traders limit orders and tighter pricing closer to a traditional exchange, without giving up self custody.</p>
+  </section>
+
+  <section class="block" id="liquidity">
+    <span class="block-mark">02 · LIQUIDITY PROVISION AND IMPERMANENT LOSS</span>
+    <h2>Earning fees means taking on a real position, not a free lunch.</h2>
+    <p>Deposit both assets in a pair into a pool and you become a <span class="term">liquidity provider</span>, earning a cut of every trade that passes through it. Sounds like passive income. It's not free. When the price of the two assets diverges from each other, the pool automatically rebalances your holdings in a way that leaves you worse off than if you'd simply held the assets separately. This is <span class="term">impermanent loss</span>, and it's permanent the moment you withdraw during a divergence.</p>
+    <p class="callout">Fee income has to outpace impermanent loss for LP positions to actually make sense. Anyone advertising an LP strategy without mentioning this mechanic is either new or not being straight with you.</p>
+  </section>
+
+  <section class="block" id="lending">
+    <span class="block-mark">03 · LENDING AND BORROWING</span>
+    <h2>Overcollateralized by design, because there's no credit score here.</h2>
+    <p>DeFi lending protocols let you deposit an asset and borrow against it, or lend it out to earn interest. Because there's no identity verification and no legal recourse if a borrower disappears, nearly every protocol requires <span class="term">overcollateralization</span>, you can only borrow a fraction of the value you've deposited, keeping the protocol solvent even if prices move against the borrower.</p>
+    <p>Drop below the required ratio and the position gets <span class="term">liquidated</span> automatically, your collateral sold to repay the loan, usually with a penalty. This isn't a bug, it's the mechanism that makes trustless lending solvent at all. Understand your liquidation price before you borrow, not after the market moves against you.</p>
+  </section>
+
+  <section class="block" id="yield">
+    <span class="block-mark">04 · READING A YIELD NUMBER HONESTLY</span>
+    <h2>High APY is a question, not an answer.</h2>
+    <p>Yield in DeFi comes from real sources, trading fees, lending interest, protocol revenue, or it comes from <span class="term">token emissions</span>, newly printed tokens handed out as rewards, funded by nothing but inflation. Both show up as the same big percentage number on a dashboard. Only one of them is sustainable.</p>
+    <div class="checklist">
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Ask where the yield comes from.</strong> Real fees and interest, or freshly minted tokens with no buyer demand behind them.</div></div>
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Check if the number survives the reward token's price.</strong> A 200% APY paid in a token that's down 90% is not actually 200%.</div></div>
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Look for a real revenue source.</strong> Trading volume, protocol fees, actual usage. If none exists, the yield is being paid by the next depositor's capital.</div></div>
+    </div>
+    <p class="warning">An unsustainable emissions model paying early depositors with later depositors' capital is structurally a Ponzi, regardless of what the protocol calls itself. The math doesn't care about the branding.</p>
+  </section>
+
+  <section class="block" id="composability">
+    <span class="block-mark">05 · COMPOSABILITY, THE REAL SUPERPOWER</span>
+    <h2>Protocols stacking on protocols, without asking permission.</h2>
+    <p>The genuinely novel part of DeFi isn't any single application. It's <span class="term">composability</span>, the fact that any protocol can build directly on top of any other, permissionlessly, because everything lives as open code on the same public infrastructure. A lending protocol can plug straight into a DEX's liquidity. A yield aggregator can route capital across a dozen protocols automatically, no partnership meetings required.</p>
+    <p>This is also where risk compounds. Money legos means a failure in one foundational protocol can cascade through everything built on top of it. Evaluate not just the protocol you're using directly, but every protocol it depends on underneath.</p>
+  </section>
+
+  <div class="punchline">If you can't explain where the yield comes from in one sentence, you don't understand the position you're in.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">Real yield has<br>a source. Fake yield<br>has a <span class="acid">deadline</span>.</p>
+  <p>Part 06 covers NFTs beyond the JPEG narrative, ownership, provenance, and soulbound assets that can't be bought at all.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-04-multichain-map.html">← PART 04, THE MULTICHAIN MAP</a>
+    <a class="next-link" href="part-06-nfts-beyond-jpegs.html">NEXT · PART 06 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part covered <span class="term mono">DEXs</span>, <span class="term mono">liquidity provision</span>, <span class="term mono">lending</span>, and how to read a <span class="term mono">yield</span> number without getting taken. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 05 OF 12 · DEFI FUNDAMENTALS</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

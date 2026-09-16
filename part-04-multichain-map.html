@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Multichain Map · Mr White's Lab</title>
+<meta name="description" content="Ethereum, Solana, Injective, XRPL, Cardano, and Bitcoin L2s, weighed honestly.">
+
+<meta property="og:title" content="The Multichain Map · Mr White's Lab">
+<meta property="og:description" content="Ethereum, Solana, Injective, XRPL, Cardano, and Bitcoin L2s, weighed honestly.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Multichain Map · Mr White's Lab">
+<meta name="twitter:description" content="Ethereum, Solana, Injective, XRPL, Cardano, and Bitcoin L2s, weighed honestly.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+  .hero { padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(46px, 8.5vw, 100px); line-height: 0.92; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 110px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 4.6vw, 44px); text-transform: uppercase; line-height: 1.05; margin-bottom: 26px; max-width: 560px; }
+  .block p { font-size: 17px; color: #D8D8D2; margin-bottom: 18px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 18px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 30px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+  .chain-tag { display: inline-block; font-family: 'Space Mono', monospace; font-size: 12px; color: var(--black); background: var(--acid); padding: 3px 8px; margin-bottom: 12px; letter-spacing: 0.06em; }
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5.5vw, 52px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } section.block { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · WEB3, PLAINLY STATED</div>
+  <div class="nav-progress">PART 04 OF 12</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE GUIDE · PART FOUR</span>
+  <h1>The Multichain Map</h1>
+  <p class="sub">Where each major chain actually wins, judged against the framework from Part 03.</p>
+  <p class="lede">You now know consensus, finality, and the trilemma. Time to apply it. Six ecosystems, judged on what they were actually built to do, not what their marketing claims. <strong>No chain wins everywhere.</strong> Anyone telling you otherwise is selling, not informing.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">ETHEREUM</span><span>·</span><span>SOLANA</span><span>·</span>
+    <span class="hit">INJECTIVE</span><span>·</span><span>XRPL</span><span>·</span>
+    <span class="hit">CARDANO</span><span>·</span><span>BITCOIN L2</span><span>·</span>
+    <span class="hit">ETHEREUM</span><span>·</span><span>SOLANA</span><span>·</span>
+    <span class="hit">INJECTIVE</span><span>·</span><span>XRPL</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="eth">
+    <span class="chain-tag">ETHEREUM</span>
+    <span class="block-mark">01 · THE SETTLEMENT LAYER EVERYTHING ELSE MEASURES AGAINST</span>
+    <h2>Slow, expensive, and still the default court of final judgment.</h2>
+    <p>Ethereum runs Proof of Stake, secured by hundreds of thousands of independent validators, the widest decentralization of any programmable chain by a large margin. That's the tradeoff it made deliberately. Base layer throughput is modest, gas can spike hard during demand, and it leans on a growing stack of Layer 2 rollups to handle volume it can't process directly.</p>
+    <p>What Ethereum actually sells is not speed. It sells the deepest liquidity, the widest developer base, and the strongest claim to being the chain institutions default to when they need maximum credible neutrality. If a protocol needs to be trusted by parties who trust nothing else, this is still where it settles.</p>
+  </section>
+
+  <section class="block" id="sol">
+    <span class="chain-tag">SOLANA</span>
+    <span class="block-mark">02 · THROUGHPUT AS THE ENTIRE THESIS</span>
+    <h2>Built for speed first, everything else second.</h2>
+    <p>Solana runs a single, tightly coupled Layer 1 with a unique consensus innovation, Proof of History, a verifiable clock that lets validators agree on transaction order without waiting on each other constantly. The result is thousands of transactions per second and fees measured in fractions of a cent, no Layer 2 required.</p>
+    <p>The tradeoff sits in validator hardware requirements, running a competitive validator takes real infrastructure, which narrows who can realistically participate compared to Ethereum's lighter requirements. Solana leans toward the throughput and scale corner of the trilemma, deliberately, and it shows in what gets built there, high frequency trading apps, consumer scale NFT drops, anything that dies under Ethereum's base layer fees.</p>
+  </section>
+
+  <section class="block" id="inj">
+    <span class="chain-tag">INJECTIVE</span>
+    <span class="block-mark">03 · BUILT FOR TRADING, NOT RETROFITTED FOR IT</span>
+    <h2>A chain designed around the order book, not the wallet.</h2>
+    <p>Injective is a Proof of Stake chain purpose built for finance, with a native on chain order book baked into the protocol itself, rather than bolted on as an application. Near zero gas fees, fast finality, and Native EVM support that lets Ethereum tooling deploy directly, without the usual bridge friction.</p>
+    <p>This is the chain I've spent the most operational time inside, running MARK Protocol here and working the ecosystem through Outpost. What it wins at is specific, derivatives, structured products, anything where execution speed and fee cost directly determine whether a strategy is even viable. It's not trying to be everything. It's trying to be the best possible venue for one category of activity, and largely succeeding.</p>
+  </section>
+
+  <section class="block" id="xrpl">
+    <span class="chain-tag">XRPL</span>
+    <span class="block-mark">04 · THE OLDEST WORKING PAYMENTS RAIL IN THIS INDUSTRY</span>
+    <h2>Built in 2012, before most of this industry had a name.</h2>
+    <p>The XRP Ledger runs its own consensus protocol, not Proof of Work or classic Proof of Stake, but a federated Byzantine agreement model where a trusted set of validators reach consensus without mining or staking. Settlement finality lands in seconds, and it was purpose built from day one for one job, moving value across borders cheaply.</p>
+    <p>The criticism is real, the validator set has historically leaned more curated than fully open compared to Solana or Ethereum. The result, in exchange, is a chain that has quietly processed payments reliably for over a decade while newer chains were still solving basic uptime. Judge it on what it's for, cross border settlement, not on whether it's the most decentralized chain in the room.</p>
+  </section>
+
+  <section class="block" id="ada">
+    <span class="chain-tag">CARDANO</span>
+    <span class="block-mark">05 · RESEARCH FIRST, SHIP SECOND, ON PURPOSE</span>
+    <h2>The chain that moves slow because it refuses to skip peer review.</h2>
+    <p>Cardano runs Ouroboros, a peer reviewed Proof of Stake protocol, built through an academic research process rather than the move fast and iterate approach most chains take. Every major upgrade goes through formal verification before shipping. This is the most deliberate tradeoff on this list, development speed sacrificed directly for correctness and provable security.</p>
+    <p>Ecosystem activity has historically lagged Ethereum and Solana in raw volume, partly a direct consequence of that caution. But for builders who prioritize formal guarantees over speed to market, particularly in regions and use cases where a bug is not an acceptable cost of iteration, that tradeoff is the entire appeal, not a weakness.</p>
+  </section>
+
+  <section class="block" id="btcl2">
+    <span class="chain-tag">BITCOIN L2S</span>
+    <span class="block-mark">06 · GIVING THE OLDEST CHAIN NEW JOBS</span>
+    <h2>Bitcoin secures. The layers on top do the work.</h2>
+    <p>Bitcoin itself was never built for programmability, no general smart contracts, deliberately minimal by design. A growing set of Layer 2 networks now build on top of it, using various models, sidechains, rollup style constructions, and the Lightning Network for instant small payments, to add functionality while still settling back to Bitcoin's base security.</p>
+    <p>This is Bitcoin's answer to the trilemma without changing its own base layer at all. Push the scaling and programmability tradeoffs up a layer, keep the base chain exactly as conservative and battle tested as it's always been. Evaluate each Bitcoin L2 on its own trust assumptions, some inherit Bitcoin's security closely, others lean more on their own validator set than the marketing implies.</p>
+  </section>
+
+  <div class="punchline">Chain choice is not loyalty. It's matching the tool to the job in front of you.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">Six chains.<br>Six different <span class="acid">answers</span><br>to the same problem.</p>
+  <p>Part 05 moves into DeFi fundamentals. DEXs, lending, liquidity, and how to tell a real yield source from a Ponzi wearing a nice interface.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-03-blockchains-and-consensus.html">← PART 03, CONSENSUS</a>
+    <a class="next-link" href="part-05-defi-fundamentals.html">NEXT · PART 05 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part mapped <span class="term mono">Ethereum</span>, <span class="term mono">Solana</span>, <span class="term mono">Injective</span>, <span class="term mono">XRPL</span>, <span class="term mono">Cardano</span>, and <span class="term mono">Bitcoin Layer 2s</span> against real tradeoffs, not marketing. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 04 OF 12 · THE MULTICHAIN MAP</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Value On Chain · Mr White's Lab</title>
+<meta name="description" content="Tokens, gas, stablecoins. What actually moves on chain, before you learn how it moves.">
+
+<meta property="og:title" content="Value On Chain · Mr White's Lab">
+<meta property="og:description" content="Tokens, gas, stablecoins. What actually moves on chain, before you learn how it moves.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Value On Chain · Mr White's Lab">
+<meta name="twitter:description" content="Tokens, gas, stablecoins. What actually moves on chain, before you learn how it moves.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0A0A0A;
+    --panel: #121212;
+    --panel-raised: #161613;
+    --ash: #8A8A85;
+    --ash-dim: #55554F;
+    --white: #F5F5F0;
+    --acid: #B8FF00;
+    --hairline: #232320;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em; }
+  .mono { font-family: 'Space Mono', monospace; }
+
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--acid);
+    outline-offset: 3px;
+  }
+
+  /* ---------- NAV ---------- */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px clamp(20px, 6vw, 64px);
+    background: rgba(10,10,10,0.88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .nav-mark {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--ash);
+  }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--acid);
+    letter-spacing: 0.1em;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: var(--acid);
+    margin-bottom: 28px;
+    display: block;
+  }
+  .hero h1 {
+    font-size: clamp(56px, 11vw, 128px);
+    line-height: 0.92;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 28px;
+  }
+  .hero .sub {
+    font-size: clamp(18px, 2.4vw, 24px);
+    color: var(--ash);
+    max-width: 620px;
+    font-weight: 400;
+  }
+  .hero .lede {
+    margin-top: 40px;
+    font-size: 18px;
+    color: var(--white);
+    max-width: 640px;
+  }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+
+  /* ---------- TICKER (signature element) ---------- */
+  .ticker-wrap {
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    padding: 22px 0;
+    overflow: hidden;
+    background: var(--panel);
+  }
+  .ticker {
+    display: flex;
+    gap: 48px;
+    white-space: nowrap;
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.14em;
+    color: var(--ash-dim);
+    padding-left: clamp(20px, 6vw, 64px);
+  }
+  .ticker span.hit { color: var(--acid); }
+
+  /* ---------- ARTICLE ---------- */
+  .article {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 100px clamp(20px, 6vw, 64px) 60px;
+  }
+  section.block {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    margin-bottom: 120px;
+  }
+  section.block.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  section.block:last-of-type { margin-bottom: 60px; }
+
+  .block-mark {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    color: var(--ash-dim);
+    display: block;
+    margin-bottom: 18px;
+  }
+  .block h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 5vw, 48px);
+    text-transform: uppercase;
+    line-height: 1.05;
+    margin-bottom: 28px;
+    max-width: 560px;
+  }
+  .block p {
+    font-size: 17px;
+    color: #D8D8D2;
+    margin-bottom: 20px;
+    max-width: 640px;
+  }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout {
+    color: var(--white);
+    font-size: 18px;
+    padding-left: 20px;
+    border-left: 2px solid var(--acid);
+    margin: 32px 0;
+  }
+  .term {
+    color: var(--acid);
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  .data-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: var(--hairline);
+    margin: 36px 0;
+    border: 1px solid var(--hairline);
+  }
+  .data-cell {
+    background: var(--panel);
+    padding: 22px 18px;
+  }
+  .data-cell .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    color: var(--acid);
+    display: block;
+  }
+  .data-cell .label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--ash);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .punchline {
+    font-family: 'Space Mono', monospace;
+    font-size: 17px;
+    color: var(--acid);
+    margin: 40px 0;
+    padding: 24px 0;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    max-width: 560px;
+  }
+
+  /* ---------- CLOSE ---------- */
+  .close {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 6vw, 64px) 140px;
+  }
+  .close .signoff {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(34px, 6vw, 56px);
+    text-transform: uppercase;
+    line-height: 1.05;
+    max-width: 620px;
+    margin-bottom: 20px;
+  }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    border: 1px solid var(--hairline);
+    padding: 16px 22px;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .next-link:hover {
+    border-color: var(--acid);
+    color: var(--acid);
+    text-decoration: none;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    border-top: 1px solid var(--hairline);
+    padding: 60px clamp(20px, 6vw, 64px) 40px;
+  }
+  .footer-inner {
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  .footer-note {
+    font-size: 15px;
+    color: var(--ash);
+    max-width: 620px;
+    margin-bottom: 32px;
+    line-height: 1.8;
+  }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .footer-links a {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    border-bottom: 1px solid var(--hairline);
+    padding: 10px 2px 12px;
+    margin: -10px -2px -12px;
+  }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--ash-dim);
+    letter-spacing: 0.06em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    section.block { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · WEB3, PLAINLY STATED</div>
+  <div class="nav-progress">PART 01 OF 12</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE GUIDE · ENTRY POINT</span>
+  <h1>Value<br>On Chain</h1>
+  <p class="sub">Before you learn what a blockchain is, learn what moves on one.</p>
+  <p class="lede">Most guides open with the ledger. Wrong order. Nobody wakes up curious about distributed consensus. They wake up because they heard money can move without a bank standing in the middle of it. That claim is <strong>either true or it isn't</strong>. This part tells you exactly what's moving, what it costs to move it, and which parts of the story are real.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">TRUSTLESS</span><span>·</span>
+    <span>PERMISSIONLESS</span><span>·</span>
+    <span class="hit">PROGRAMMABLE</span><span>·</span>
+    <span>SETTLEMENT</span><span>·</span>
+    <span class="hit">SELF CUSTODY</span><span>·</span>
+    <span>FINALITY</span><span>·</span>
+    <span class="hit">TRUSTLESS</span><span>·</span>
+    <span>PERMISSIONLESS</span><span>·</span>
+    <span class="hit">PROGRAMMABLE</span><span>·</span>
+    <span>SETTLEMENT</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="tokens">
+    <span class="block-mark">01 · WHAT A TOKEN ACTUALLY IS</span>
+    <h2>It's not a coin. It's an entry.</h2>
+    <p>Forget the word crypto for a moment. A <span class="term">token</span> is a balance recorded inside a piece of software that everyone running the network agrees to trust, because the rules for changing that balance are public and enforced by code, not by a person at a desk.</p>
+    <p>When you "own" a token, you don't own a file. You control the only key that can authorize a change to your entry in that ledger. That's the entire mechanic. No vault, no teller, no institution deciding whether your request is allowed. The network checks the math and either accepts the change or rejects it.</p>
+    <p class="callout">This is the part people skip past to get to the price chart. Don't. If you understand this one sentence, you understand more than most people who have been in this space for two years.</p>
+    <p>Two categories matter early. <strong>Fungible</strong> tokens are interchangeable, one unit is identical to the next, same as currency. <strong>Non fungible</strong> tokens are unique entries, each one distinct. We go deep on the second category in Part 06. Right now, focus on the first, because it's the one that actually moves value at scale.</p>
+  </section>
+
+  <section class="block" id="native">
+    <span class="block-mark">02 · NATIVE ASSETS VS CONTRACT TOKENS</span>
+    <h2>Two different jobs, one word.</h2>
+    <p>Every chain has a <span class="term">native asset</span>. ETH on Ethereum. SOL on Solana. INJ on Injective. XRP on the XRP Ledger. ADA on Cardano. This is the asset that pays for the network's own security and computation. It existed before any application was built on top of the chain, and the chain cannot function without it.</p>
+    <p>Then there are <span class="term">contract tokens</span>. Built on top of a chain using its programming standard. ERC20 on Ethereum. SPL on Solana. These are applications, not infrastructure. A project launches one when it wants its own unit of account, its own incentive design, its own economy sitting on top of someone else's security.</p>
+    <div class="data-strip">
+      <div class="data-cell"><span class="num">L1</span><span class="label">Native asset secures the base chain</span></div>
+      <div class="data-cell"><span class="num">L2</span><span class="label">Contract token secures nothing on its own</span></div>
+      <div class="data-cell"><span class="num">1:1</span><span class="label">Every contract token depends on its host chain staying alive</span></div>
+    </div>
+    <p>Why this distinction matters practically: if the chain goes down, every contract token on it goes down with it. When you evaluate a project, you're never just evaluating the token. You're evaluating the chain underneath it, whether you asked to or not.</p>
+  </section>
+
+  <section class="block" id="gas">
+    <span class="block-mark">03 · GAS, THE PRICE OF TRUTH</span>
+    <h2>Nothing moves for free. That's the point.</h2>
+    <p><span class="term">Gas</span> is the fee you pay to have the network execute your transaction. Not a platform fee. Not profit for a company. Payment to the validators and miners who do the computation and secure the result.</p>
+    <p>Here's why it exists at all. Block space is finite. A block can only hold so many transactions. If sending a transaction were free, the network would flood instantly, spam and legitimate activity indistinguishable, the whole system unusable. Gas is what keeps a blockchain from collapsing under its own openness. It's a toll, not a tax.</p>
+    <p>Gas is priced by demand for that block space. More people trying to transact at once, higher the price to get included. This is why fees spike during high activity and drop to nothing at 4am. You're not paying for your transaction's complexity alone, you're paying for your place in the queue.</p>
+    <p class="callout">Chains compete on this number more than on almost anything else. A chain with expensive, unpredictable gas loses builders and users to one with cheap, predictable gas. This is a large part of why "which chain" became a real question instead of a solved one.</p>
+    <p>Every ecosystem prices it differently. Ethereum runs a fee market with a burn mechanism, base fee destroyed, priority fee tipped to validators. Solana keeps fees near flat and low by design, optimizing for throughput over auction dynamics. Injective runs near zero fees for most user actions, subsidizing the cost at the protocol level because the chain was built for trading activity that can't tolerate friction. Same problem, three different answers. We map this properly in Part 04.</p>
+  </section>
+
+  <section class="block" id="stablecoins">
+    <span class="block-mark">04 · STABLECOINS, THE ONE THING THAT WORKED</span>
+    <h2>The only product web3 has fully proven.</h2>
+    <p>Say what you want about the rest of this industry. <span class="term">Stablecoins</span> work. A token designed to hold a fixed value, almost always pegged one to one with the US dollar, moving on public rails instead of banking rails. That's not a narrative. That's billions in daily settlement, functioning, right now.</p>
+    <p>Three models, and the difference between them is the difference between safe and catastrophic.</p>
+    <p><strong>Fiat collateralized.</strong> USDC, USDT. A company holds real dollars or short term treasuries in reserve, one for one against every token issued. The trust here is not in code. It's in the issuer's honesty and the auditors checking their books. Centralized trust wearing a decentralized outfit. Know that going in.</p>
+    <p><strong>Crypto collateralized.</strong> DAI is the reference example. Backed by a basket of onchain assets locked in smart contracts, overcollateralized to absorb price swings in the collateral itself. More decentralized, more transparent, more moving parts that can go wrong under extreme volatility.</p>
+    <p><strong>Algorithmic.</strong> No collateral, or minimal collateral, the peg held together by incentive design and a second token absorbing the volatility. This model has a body count. UST, the Terra stablecoin, ran this design and lost its peg in May 2022, erasing roughly forty billion dollars in value in a matter of days. Study that collapse before you touch anything with this model. It's not a cautionary footnote. It's the single clearest lesson in this entire guide.</p>
+    <div class="punchline">A peg is a promise. Promises break under pressure. Know which promise you're holding.</div>
+  </section>
+
+  <section class="block" id="thesis">
+    <span class="block-mark">05 · WHY THIS IS THE BIGGEST FORM OF ONCHAIN VALUE</span>
+    <h2>Speculation gets the headlines. Settlement does the work.</h2>
+    <p>NFTs get the culture. DeFi yield gets the spreadsheets. Memecoins get the volume on a bad Tuesday. None of it moves the amount of real economic value that stablecoin settlement moves, quietly, every single day, across borders that used to require a correspondent bank and three business days.</p>
+    <p>That's the actual thesis underneath this whole guide. Not that web3 replaces finance overnight. That it already replaced one specific, boring, enormous function: moving a dollar equivalent from one party to another without asking permission first. Everything else in this series, wallets, chains, DeFi, NFTs, DAOs, is built on top of that one proven fact, or trying to be.</p>
+    <p>When you evaluate any new protocol, any new chain, any new narrative someone pitches you, come back to this part. Ask what value is actually moving, what it costs to move it, and whether the promise behind it is collateral you can verify or a story you're being asked to trust.</p>
+  </section>
+
+</main>
+
+<div class="close">
+  <p class="signoff">You now know<br>more than <span class="acid">most</span><br>people holding.</p>
+  <p>Part 02 goes into wallets and keys. Where custody actually lives, and the one mistake that has ended more people in this space than any hack ever has.</p>
+  <a class="next-link" href="part-02-wallets-and-keys.html">NEXT · PART 02, WALLETS AND KEYS →</a>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part covered <span class="term mono">tokens</span>, <span class="term mono">native assets</span>, <span class="term mono">gas</span>, and <span class="term mono">stablecoins</span>, the four mechanics that move value on any chain. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 01 OF 12 · VALUE ON CHAIN</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

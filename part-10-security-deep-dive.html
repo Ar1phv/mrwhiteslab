@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Deep Dive · Mr White's Lab</title>
+<meta name="description" content="Rug pulls, phishing infrastructure, exploits, and the discipline that keeps you safe.">
+
+<meta property="og:title" content="Security Deep Dive · Mr White's Lab">
+<meta property="og:description" content="Rug pulls, phishing infrastructure, exploits, and the discipline that keeps you safe.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Security Deep Dive · Mr White's Lab">
+<meta name="twitter:description" content="Rug pulls, phishing infrastructure, exploits, and the discipline that keeps you safe.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; --danger: #FF4D4D; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+  .hero { padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(46px, 8.4vw, 100px); line-height: 0.92; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 110px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 4.6vw, 44px); text-transform: uppercase; line-height: 1.05; margin-bottom: 26px; max-width: 560px; }
+  .block p { font-size: 17px; color: #D8D8D2; margin-bottom: 18px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 18px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 30px 0; }
+  .block p.warning { color: var(--white); font-size: 17px; padding-left: 20px; border-left: 2px solid var(--danger); margin: 30px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+  .checklist { border: 1px solid var(--hairline); margin: 32px 0; }
+  .check-row { display: flex; gap: 16px; padding: 18px 20px; border-bottom: 1px solid var(--hairline); align-items: flex-start; }
+  .check-row:last-child { border-bottom: none; }
+  .check-mark { font-family: 'Space Mono', monospace; color: var(--acid); font-size: 14px; padding-top: 2px; }
+  .check-text { font-size: 15.5px; color: #D8D8D2; }
+  .check-text strong { color: var(--white); }
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5.5vw, 52px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } section.block { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · WEB3, PLAINLY STATED</div>
+  <div class="nav-progress">PART 10 OF 12</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE GUIDE · PART TEN</span>
+  <h1>Security Deep Dive</h1>
+  <p class="sub">Scams, rug pulls, exploits, and the operational discipline that keeps you safe long term.</p>
+  <p class="lede">Part 02 covered your keys. This part covers everything else trying to get past them. <strong>Every dollar lost in this industry follows a pattern.</strong> Learn the patterns and you remove yourself from most of the addressable victim pool, permanently.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">AUDIT</span><span>·</span><span>RUG PULL</span><span>·</span>
+    <span class="hit">PHISHING</span><span>·</span><span>DRAINER</span><span>·</span>
+    <span class="hit">OPSEC</span><span>·</span><span>EXPLOIT</span><span>·</span>
+    <span class="hit">AUDIT</span><span>·</span><span>RUG PULL</span><span>·</span>
+    <span class="hit">PHISHING</span><span>·</span><span>DRAINER</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="rugpull">
+    <span class="block-mark">01 · RUG PULLS, THE MECHANICS BEHIND THE WORD</span>
+    <h2>Someone always holds the exit you don't have.</h2>
+    <p>A <span class="term">rug pull</span> happens when a project's team drains the liquidity or treasury and disappears, leaving holders with a token that's suddenly worth nothing because there's no counterparty left to sell to. The mechanics vary, an unlocked liquidity pool the team can withdraw unilaterally, a hidden minting function that lets them print unlimited supply, or admin keys that let them simply change the rules after launch.</p>
+    <div class="checklist">
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Check if liquidity is locked.</strong> A time locked or burned liquidity pool means the team physically cannot pull it early.</div></div>
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Check for admin functions.</strong> Contracts with unrestricted mint, pause, or upgrade functions controlled by one wallet are a single point of failure.</div></div>
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Check the team's actual track record.</strong> Anonymous teams aren't automatically fraudulent, but anonymous teams with no prior shipped work carry meaningfully more risk.</div></div>
+    </div>
+  </section>
+
+  <section class="block" id="audits">
+    <span class="block-mark">02 · WHAT AN AUDIT ACTUALLY GUARANTEES</span>
+    <h2>Less than most people assume. Still worth checking.</h2>
+    <p>A <span class="term">smart contract audit</span> is a professional review of a protocol's code, looking for vulnerabilities before real funds are at risk. Useful, and worth checking for before depositing meaningful size. Not a guarantee. Audited protocols have still been exploited, because audits find known vulnerability patterns, they don't prove the absence of every possible flaw, and a paid audit from a low quality firm is close to worthless.</p>
+    <p class="callout">Check who performed the audit, read the actual findings and whether they were resolved, not just whether a badge exists on the website. A badge with no linked report behind it is decoration, not proof.</p>
+  </section>
+
+  <section class="block" id="phishing">
+    <span class="block-mark">03 · PHISHING INFRASTRUCTURE HAS GOTTEN GOOD</span>
+    <h2>The fake looks identical. Check the parts that can't be faked.</h2>
+    <p>Cloned websites, near identical domain names, fake support accounts replying inside real project Discord servers, and drainer contracts disguised as routine mints or claims, this is a full criminal industry now, with tooling sophisticated enough that visual inspection alone won't catch it. I terminated a community management engagement mid onboarding once a phishing domain was identified in that exact setup, and reported the issue rather than proceeding.</p>
+    <p>Bookmark official links directly rather than searching or clicking links from DMs, ever. Verify a suspicious support contact through a second, independent channel before acting on anything they tell you. Treat unsolicited DMs offering help as a threat by default, not a courtesy.</p>
+  </section>
+
+  <section class="block" id="opsec">
+    <span class="block-mark">04 · OPSEC FOR ANYONE BUILDING A PUBLIC PROFILE</span>
+    <h2>Visibility is leverage. It's also a target painted on your back.</h2>
+    <p>Operating publicly in this industry, as a creator, builder, or operator, adds a layer of risk past the standard wallet security from Part 02. Public wallet addresses tied to a known identity become direct social engineering targets. Fake job offers, fake investment opportunities, and fake urgent messages from "team members" escalate specifically because an attacker knows exactly who you are and what you might have.</p>
+    <p class="warning">Separate your operational wallets from any wallet address you've ever publicly associated with your identity. Assume any DM claiming urgency, opportunity, or authority is hostile until independently verified through a channel the sender doesn't control.</p>
+  </section>
+
+  <section class="block" id="exploits">
+    <span class="block-mark">05 · SMART CONTRACT EXPLOITS, THE PATTERNS THAT REPEAT</span>
+    <h2>Most hacks aren't new. They're the same five mistakes, again.</h2>
+    <p>Reentrancy attacks, where a malicious contract calls back into a vulnerable function before its first execution finishes, draining funds through repeated calls. Oracle manipulation, referenced in Part 08, feeding a contract false price data to trigger unfair liquidations or mispriced trades. Flash loan exploits, borrowing enormous uncollateralized sums for a single transaction to manipulate a protocol's internal pricing before repaying the loan in the same block.</p>
+    <p>None of these require you to understand the code yourself. What they require is checking whether a protocol holding your funds has been audited by a reputable firm, has a track record without major incidents, and hasn't concentrated too much value in a design pattern known to be historically exploited.</p>
+  </section>
+
+  <div class="punchline">Every major loss in this industry had a warning sign that was visible before the money moved. Slow down enough to see it.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">Paranoia, applied<br>correctly, is just<br>good <span class="acid">operating</span>.</p>
+  <p>Part 11 closes the core series looking forward, real world assets, on chain identity, and AI agents transacting directly on chain.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-09-creator-and-bd-economy.html">← PART 09, THE CREATOR AND BD ECONOMY</a>
+    <a class="next-link" href="part-11-where-this-goes.html">NEXT · PART 11 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part covered <span class="term mono">rug pulls</span>, <span class="term mono">audits</span>, <span class="term mono">phishing infrastructure</span>, and operational security for public identities. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 10 OF 12 · SECURITY DEEP DIVE</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

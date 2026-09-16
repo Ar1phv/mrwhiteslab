@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NFTs Beyond JPEGs · Mr White's Lab</title>
+<meta name="description" content="Provenance, royalties, and soulbound assets that can't be bought at all.">
+
+<meta property="og:title" content="NFTs Beyond JPEGs · Mr White's Lab">
+<meta property="og:description" content="Provenance, royalties, and soulbound assets that can't be bought at all.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NFTs Beyond JPEGs · Mr White's Lab">
+<meta name="twitter:description" content="Provenance, royalties, and soulbound assets that can't be bought at all.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+  .hero { padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 9vw, 108px); line-height: 0.92; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 110px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 4.6vw, 44px); text-transform: uppercase; line-height: 1.05; margin-bottom: 26px; max-width: 560px; }
+  .block p { font-size: 17px; color: #D8D8D2; margin-bottom: 18px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 18px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 30px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+  .data-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; background: var(--hairline); margin: 32px 0; border: 1px solid var(--hairline); }
+  .data-cell { background: var(--panel); padding: 22px 18px; }
+  .data-cell .num { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--acid); display: block; }
+  .data-cell .label { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--ash); letter-spacing: 0.08em; text-transform: uppercase; }
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5.5vw, 52px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } section.block { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · WEB3, PLAINLY STATED</div>
+  <div class="nav-progress">PART 06 OF 12</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE GUIDE · PART SIX</span>
+  <h1>NFTs Beyond JPEGs</h1>
+  <p class="sub">Ownership, provenance, and the soulbound assets that can't be bought at all.</p>
+  <p class="lede">Say NFT and most people picture an overpriced cartoon avatar from 2021. Fair reaction to a real bubble. But the underlying mechanic, <strong>a unique, verifiable entry of ownership on a public ledger</strong>, has uses far past profile pictures. This part separates the mechanic from the mania.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">PROVENANCE</span><span>·</span><span>METADATA</span><span>·</span>
+    <span class="hit">ROYALTY</span><span>·</span><span>SOULBOUND</span><span>·</span>
+    <span class="hit">UNIQUE</span><span>·</span><span>OWNERSHIP</span><span>·</span>
+    <span class="hit">PROVENANCE</span><span>·</span><span>METADATA</span><span>·</span>
+    <span class="hit">ROYALTY</span><span>·</span><span>SOULBOUND</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="mechanic">
+    <span class="block-mark">01 · THE MECHANIC UNDER THE HYPE</span>
+    <h2>Non fungible means one of one, not one of a million.</h2>
+    <p>An <span class="term">NFT</span> is a token where each unit is unique and non interchangeable, unlike the fungible tokens from Part 01 where every unit is identical. That uniqueness is what makes it useful as a record of ownership over a specific thing, a specific artwork, a specific ticket, a specific claim.</p>
+    <p>The image people associate with NFTs usually isn't stored on chain at all, it's typically hosted elsewhere, referenced by a link inside the token's <span class="term">metadata</span>. What's actually on chain, immutably, is the ownership record and that reference. Understand this and you understand why so many "rug pulled" NFT projects could vanish the artwork while the token itself remained technically intact.</p>
+  </section>
+
+  <section class="block" id="provenance">
+    <span class="block-mark">02 · PROVENANCE, THE PART THAT ACTUALLY MATTERS</span>
+    <h2>A complete, unforgeable ownership history.</h2>
+    <p><span class="term">Provenance</span> is the full chain of custody for an asset, every wallet that has ever owned it, in order, permanently recorded and publicly checkable. In traditional art and collectibles markets, provenance is expensive to verify and easy to fake. On chain, it's free to verify and effectively impossible to fake.</p>
+    <div class="data-strip">
+      <div class="data-cell"><span class="num">100%</span><span class="label">Ownership history checkable by anyone, instantly</span></div>
+      <div class="data-cell"><span class="num">0</span><span class="label">Authentication firms required to verify it</span></div>
+    </div>
+    <p>This is the actual utility, not the picture, the picture is just the wrapper. Ticketing, luxury goods authentication, real estate title records, anything where "prove this is genuinely yours, and only yours" has value, is a candidate for this mechanic. Most of the industry hasn't built this yet. The mechanic is ready before the market is.</p>
+  </section>
+
+  <section class="block" id="royalty">
+    <span class="block-mark">03 · ROYALTIES AND CREATOR ECONOMICS</span>
+    <h2>Getting paid every time your work resells. In theory.</h2>
+    <p>NFT standards allow creators to encode a <span class="term">royalty</span>, a percentage automatically routed back to them on every secondary sale, forever, without needing a lawyer or a licensing deal. This was genuinely novel for creators historically locked out of resale value on their own work.</p>
+    <p>In practice, royalty enforcement has been a running fight. Some marketplaces made royalties optional to compete on lower fees, and creators lost income as a result. The lesson is not that the mechanic failed, it's that a mechanic only works if the platforms around it actually enforce it. Check whether royalty enforcement is on chain and unavoidable, or just a polite request a marketplace can ignore.</p>
+  </section>
+
+  <section class="block" id="soulbound">
+    <span class="block-mark">04 · SOULBOUND TOKENS, OWNERSHIP THAT CAN'T BE SOLD</span>
+    <h2>The most interesting NFT is the one you can never sell.</h2>
+    <p>A <span class="term">soulbound token</span> is non transferable by design, permanently bound to the wallet it was issued to. This flips the entire assumption behind NFTs as speculative assets. It's not built to trade. It's built to represent something that shouldn't be for sale in the first place, a credential, a reputation record, proof of participation, proof of contribution.</p>
+    <p class="callout">This is the exact design behind MARK Protocol, the creator support system I built on Injective, following the EIP-5192 standard. Reputation you can buy isn't reputation. Making it non transferable was the entire point, not a limitation.</p>
+    <p>Think identity, credentials, and access rights, not collectibles. A university degree as a soulbound token can't be counterfeited or bought secondhand. A contributor badge means something specific precisely because nobody could simply purchase their way into it.</p>
+  </section>
+
+  <section class="block" id="market">
+    <span class="block-mark">05 · READING AN NFT MARKET WITHOUT GETTING PLAYED</span>
+    <h2>Floor price is a headline, not a fact.</h2>
+    <p>A collection's <span class="term">floor price</span>, the cheapest listed item, gets quoted as if it represents the whole market's health. It usually doesn't. Thin liquidity means a handful of low listings can crater a headline number while actual trading volume tells a completely different story. Check volume and unique buyer count before trusting a floor price alone.</p>
+    <p>Wash trading, artificially inflating volume by trading an asset back and forth between wallets you control, is common enough in this market that raw volume numbers deserve the same skepticism as raw APY numbers from Part 05. Same discipline, different asset class.</p>
+  </section>
+
+  <div class="punchline">The picture is marketing. The provenance record is the product.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">Ownership you<br>can prove beats<br>ownership you're <span class="acid">told</span>.</p>
+  <p>Part 07 covers DAOs, on chain coordination, how decisions actually get made when there's no CEO signing off.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-05-defi-fundamentals.html">← PART 05, DEFI FUNDAMENTALS</a>
+    <a class="next-link" href="part-07-daos-and-coordination.html">NEXT · PART 07 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part covered <span class="term mono">provenance</span>, <span class="term mono">royalties</span>, and <span class="term mono">soulbound tokens</span>, the NFT mechanics that outlast the JPEG cycle. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 06 OF 12 · NFTS BEYOND JPEGS</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>
