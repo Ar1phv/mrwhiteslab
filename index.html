@@ -92,6 +92,9 @@
   .jobboard-eyebrow { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: var(--acid); margin-bottom: 10px; display: block; }
   .jobboard-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(26px, 4.4vw, 38px); text-transform: uppercase; color: var(--white); margin-bottom: 8px; }
   .jobboard-desc { font-size: 15px; color: var(--ash); max-width: 520px; }
+  .callout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--hairline); border: 1px solid var(--hairline); }
+  .callout-grid .jobboard-card { border: none; background: var(--black); height: 100%; }
+  @media (max-width: 620px) { .callout-grid { grid-template-columns: 1fr; } }
 
   .close { max-width: 920px; margin: 0 auto; padding: 40px clamp(20px, 6vw, 64px) 140px; }
   .close p { color: var(--ash); max-width: 560px; }
@@ -116,6 +119,7 @@
 <nav class="nav">
   <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · WEB3, PLAINLY STATED</div>
   <div class="nav-links">
+    <a class="author-link" href="ta-corner.html">TA CORNER →</a>
     <a class="author-link" href="job-board.html">JOB BOARD →</a>
     <a class="author-link" href="part-00-author.html">AUTHOR →</a>
   </div>
@@ -340,11 +344,18 @@
 </main>
 
 <div class="jobboard-callout">
-  <a class="jobboard-card" href="job-board.html">
-    <span class="jobboard-eyebrow">SEPARATE FROM THE 20 PARTS · A GROWING DATABASE</span>
-    <div class="jobboard-title">The Job Board →</div>
-    <div class="jobboard-desc">Every real web3 job, explained plainly. What you do, what skills you need, how to actually start, how pay works. Searchable, and it keeps growing.</div>
-  </a>
+  <div class="callout-grid">
+    <a class="jobboard-card" href="job-board.html">
+      <span class="jobboard-eyebrow">A GROWING DATABASE</span>
+      <div class="jobboard-title">The Job Board →</div>
+      <div class="jobboard-desc">Every real web3 job, explained plainly. What you do, what skills you need, how to start, how pay works.</div>
+    </a>
+    <a class="jobboard-card" href="ta-corner.html">
+      <span class="jobboard-eyebrow">GUIDES, DIAGRAMS, PSYCHOLOGY</span>
+      <div class="jobboard-title">TA Corner →</div>
+      <div class="jobboard-desc">Candlesticks, chart patterns, indicators, drawn out. Then the psychology that decides if any of it actually helps you.</div>
+    </a>
+  </div>
 </div>
 
 <div class="close">
