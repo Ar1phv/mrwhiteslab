@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bridges And Interoperability</title>
+<meta name="description" content="Wrapped assets, bridge mechanics, and why bridges are the most hacked category in the industry.">
+<meta property="og:title" content="Bridges And Interoperability">
+<meta property="og:description" content="Wrapped assets, bridge mechanics, and why bridges are the most hacked category in the industry.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bridges And Interoperability">
+<meta name="twitter:description" content="Wrapped assets, bridge mechanics, and why bridges are the most hacked category in the industry.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; --danger: #FF4D4D; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+  .hero { padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 8vw, 96px); line-height: 0.94; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 110px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 4.6vw, 44px); text-transform: uppercase; line-height: 1.05; margin-bottom: 26px; max-width: 560px; }
+  .block p { font-size: 17px; color: #D8D8D2; margin-bottom: 18px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 18px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 30px 0; }
+  .block p.warning { color: var(--white); font-size: 17px; padding-left: 20px; border-left: 2px solid var(--danger); margin: 30px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+  .data-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; background: var(--hairline); margin: 32px 0; border: 1px solid var(--hairline); }
+  .data-cell { background: var(--panel); padding: 22px 18px; }
+  .data-cell .num { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--acid); display: block; }
+  .data-cell .label { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--ash); letter-spacing: 0.08em; text-transform: uppercase; }
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5.5vw, 52px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } section.block { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · EXTENSION PACK</div>
+  <div class="nav-progress">PART 13 OF 20</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE EXTENSION PACK · PART THIRTEEN</span>
+  <h1>Bridges And<br>Interoperability</h1>
+  <p class="sub">Wrapped assets, bridge mechanics, and the single most hacked category in this industry's history.</p>
+  <p class="lede">Part 04 mapped six chains as if they were separate countries. They are. A <span class="term">bridge</span> is what lets value cross the border. It's also, historically, <strong>where the biggest thefts in crypto have happened</strong>, by a wide margin. Understand the mechanism before you trust it with real size.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">BRIDGE</span><span>·</span><span>WRAPPED ASSET</span><span>·</span>
+    <span class="hit">LOCK AND MINT</span><span>·</span><span>VALIDATOR SET</span><span>·</span>
+    <span class="hit">LIGHT CLIENT</span><span>·</span><span>TRUST ASSUMPTION</span><span>·</span>
+    <span class="hit">BRIDGE</span><span>·</span><span>WRAPPED ASSET</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="mechanic">
+    <span class="block-mark">01 · WHY CHAINS NEED BRIDGES AT ALL</span>
+    <h2>Every chain is its own island by default.</h2>
+    <p>Part 03 established that each blockchain runs its own independent consensus. That independence is a feature, and it's also the reason no chain can natively see or verify what happened on another one. An asset native to Solana doesn't just exist on Injective, there's no shared ledger between them. A <span class="term">bridge</span> is the infrastructure that manufactures cross chain movement that doesn't naturally exist.</p>
+    <p>Most bridges work through a <span class="term">lock and mint</span> model. Deposit an asset into a contract on the source chain, it gets locked there, and an equivalent <span class="term">wrapped asset</span> gets minted on the destination chain, a synthetic IOU representing the locked original. Wrapped Bitcoin on Ethereum, WBTC, is the clearest widely used example, Bitcoin locked on one side, a tradeable representation on the other.</p>
+  </section>
+
+  <section class="block" id="trust">
+    <span class="block-mark">02 · EVERY BRIDGE MAKES A TRUST ASSUMPTION</span>
+    <h2>Someone, or something, has to vouch for the lock.</h2>
+    <p>The destination chain has no independent way to verify that the source chain deposit actually happened. It has to trust a reporting mechanism. That mechanism is where bridges diverge sharply in security model, and where nearly every major exploit has originated.</p>
+    <div class="data-strip">
+      <div class="data-cell"><span class="num">MS</span><span class="label">Multisig bridges, a small validator set signs off on transfers</span></div>
+      <div class="data-cell"><span class="num">LC</span><span class="label">Light client bridges, cryptographically verify the source chain directly</span></div>
+      <div class="data-cell"><span class="num">OP</span><span class="label">Optimistic bridges, assume validity, allow a challenge window to dispute it</span></div>
+    </div>
+    <p>Multisig bridges are fast and cheap to build, and they concentrate risk into however many keys control that multisig, exactly the centralization tradeoff from Part 07 applied to a much larger pool of locked funds. Light client bridges are more trustless, verifying the source chain's actual state cryptographically, and they're considerably more expensive and complex to build correctly.</p>
+  </section>
+
+  <section class="block" id="hacks">
+    <span class="block-mark">03 · THE HISTORY YOU NEED TO KNOW BEFORE YOU BRIDGE ANYTHING</span>
+    <h2>The receipts, not the theory.</h2>
+    <p>The Ronin Bridge exploit, March 2022, roughly 625 million dollars, a validator set compromised through five of nine signing keys falling to a single attacker, a direct multisig trust assumption failure. The Wormhole bridge, February 2022, roughly 325 million dollars, a signature verification flaw in the smart contract itself. The Nomad bridge, August 2022, roughly 190 million dollars, a single misconfigured line of code that let anyone spoof a valid message and drain funds, copied by hundreds of opportunistic wallets within hours once the flaw became public.</p>
+    <p class="warning">Three different failure modes, three of the largest thefts in this industry's history, all bridges. This isn't a reason to avoid cross chain activity entirely. It's a reason to treat bridging as the highest risk single action in your entire on chain workflow, deserving more scrutiny than a swap or a stake, not less.</p>
+  </section>
+
+  <section class="block" id="native">
+    <span class="block-mark">04 · NATIVE INTEROPERABILITY, THE ALTERNATIVE APPROACH</span>
+    <h2>Some ecosystems are trying to skip the bridge entirely.</h2>
+    <p>Rather than bolting a bridge onto separate chains after the fact, some ecosystems build interoperability into the base protocol. The Inter-Blockchain Communication protocol, IBC, used across the Cosmos ecosystem, lets chains verify each other directly through light clients as a native feature, not a third party add on. Injective's own interoperability, and its Native EVM support referenced in Part 04, leans on this model rather than a bolted on bridge for a large share of its cross ecosystem activity.</p>
+    <p>This doesn't eliminate risk, no design does, but it removes an entire category of it, the third party bridge operator as a single point of failure. Watch which direction the ecosystems you use are actually building toward.</p>
+  </section>
+
+  <section class="block" id="checklist">
+    <span class="block-mark">05 · BEFORE YOU BRIDGE, CHECK THIS</span>
+    <h2>The same discipline from Part 10, applied here specifically.</h2>
+    <p>Check the bridge's security model directly, multisig, light client, or optimistic, and how many independent parties actually control it. Check whether it's been audited, and by whom, the same audit scrutiny from Part 10 applies with extra weight here given the concentration of funds bridges typically hold. Check its track record, a bridge with years of uncontested operation and meaningful volume has earned more trust than a new one promising faster speeds.</p>
+    <p>For large amounts, consider splitting the transfer, or using a bridge with a proven track record even if it's slower or costs more than a newer alternative. The fee difference is never worth the tail risk on a security model you haven't actually checked.</p>
+  </section>
+
+  <div class="punchline">A bridge is a promise that two separate systems agree on what happened. Verify who's actually making that promise before you trust it with size.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">Every border<br>crossing has a<br>guard. Check <span class="acid">who</span>.</p>
+  <p>Part 14 covers on-ramps and off-ramps, the practical wall between fiat and crypto that most guides skip entirely.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-12-research-vault.html">← PART 12, THE RESEARCH VAULT</a>
+    <a class="next-link" href="part-14-on-ramps-and-off-ramps.html">NEXT · PART 14 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part covered <span class="term mono">bridge mechanics</span>, <span class="term mono">wrapped assets</span>, and the real hack history that makes bridging the highest risk step in any workflow. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 13 OF 20 · BRIDGES AND INTEROPERABILITY</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

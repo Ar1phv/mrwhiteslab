@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On-Ramps And Off-Ramps</title>
+<meta name="description" content="Actually turning fiat into crypto and back, KYC, exchanges, and the first real wall every newcomer hits.">
+<meta property="og:title" content="On-Ramps And Off-Ramps">
+<meta property="og:description" content="Actually turning fiat into crypto and back, KYC, exchanges, and the first real wall every newcomer hits.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="On-Ramps And Off-Ramps">
+<meta name="twitter:description" content="Actually turning fiat into crypto and back, KYC, exchanges, and the first real wall every newcomer hits.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+  .hero { padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 8vw, 96px); line-height: 0.94; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 110px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 4.6vw, 44px); text-transform: uppercase; line-height: 1.05; margin-bottom: 26px; max-width: 560px; }
+  .block p { font-size: 17px; color: #D8D8D2; margin-bottom: 18px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 18px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 30px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+  .checklist { border: 1px solid var(--hairline); margin: 32px 0; }
+  .check-row { display: flex; gap: 16px; padding: 18px 20px; border-bottom: 1px solid var(--hairline); align-items: flex-start; }
+  .check-row:last-child { border-bottom: none; }
+  .check-mark { font-family: 'Space Mono', monospace; color: var(--acid); font-size: 14px; padding-top: 2px; }
+  .check-text { font-size: 15.5px; color: #D8D8D2; }
+  .check-text strong { color: var(--white); }
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5.5vw, 52px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } section.block { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · EXTENSION PACK</div>
+  <div class="nav-progress">PART 14 OF 20</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE EXTENSION PACK · PART FOURTEEN</span>
+  <h1>On-Ramps And<br>Off-Ramps</h1>
+  <p class="sub">The first real wall every newcomer hits, and the one thing most guides assume you've already solved.</p>
+  <p class="lede">Every part before this one assumed you already had crypto in a wallet. Fair assumption for twelve parts of mechanism. Not fair for a complete guide. <strong>Getting money in, and getting it back out</strong>, is its own skill, with its own risks, and it deserves its own part.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">KYC</span><span>·</span><span>ON-RAMP</span><span>·</span>
+    <span class="hit">OFF-RAMP</span><span>·</span><span>P2P</span><span>·</span>
+    <span class="hit">SETTLEMENT TIME</span><span>·</span><span>SPREAD</span><span>·</span>
+    <span class="hit">KYC</span><span>·</span><span>ON-RAMP</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="onramp">
+    <span class="block-mark">01 · WHAT AN ON-RAMP ACTUALLY IS</span>
+    <h2>The one door between your bank and your wallet.</h2>
+    <p>An <span class="term">on-ramp</span> is any service that converts fiat currency, dollars, naira, whatever you're starting with, into crypto. Centralized exchanges, CEXs from Part 08, are the most common on-ramp, letting you deposit fiat directly through a bank transfer or card, buy an asset, then withdraw it to your own non custodial wallet from Part 02.</p>
+    <p>The moment you deposit fiat into a CEX, you're back in the custodial model, someone else holding your funds until you withdraw. That's not a flaw, it's simply the necessary bridge between a banking system that requires identity and a chain that doesn't. Know exactly when you cross that line, and get your assets into self custody as soon as the on-ramp step is done.</p>
+  </section>
+
+  <section class="block" id="kyc">
+    <span class="block-mark">02 · KYC, THE PRICE OF ENTRY</span>
+    <h2>Permissionless on chain. Permissioned at the door.</h2>
+    <p>Part 01's entire thesis rests on permissionless value transfer. That permissionless property starts the moment your funds land on chain, not before. Getting there almost always requires <span class="term">KYC</span>, know your customer, identity verification most regulated exchanges are legally required to collect before letting you convert fiat.</p>
+    <p class="callout">This isn't a contradiction of the thesis, it's the actual boundary of it. The chain itself doesn't ask who you are. The regulated on-ramp connecting it to the banking system does. Understanding exactly where that boundary sits prevents a lot of confused frustration for newcomers expecting the entire stack to be anonymous.</p>
+  </section>
+
+  <section class="block" id="offramp">
+    <span class="block-mark">03 · OFF-RAMPS, GETTING BACK TO SPENDABLE MONEY</span>
+    <h2>The exit matters as much as the entry.</h2>
+    <p>An <span class="term">off-ramp</span> reverses the process, converting crypto back into fiat you can actually spend or hold in a bank account. Same exchanges usually handle both directions. The details that actually matter here, <span class="term">settlement time</span>, how long the fiat takes to actually land in your bank after you sell, and the <span class="term">spread</span>, the gap between the market price and what you actually receive, which varies significantly between platforms and isn't always advertised clearly upfront.</p>
+    <p>Test any new off-ramp with a small amount before routing real size through it. Confirm settlement time and final amount received match what was advertised, before you trust it with something that actually matters.</p>
+  </section>
+
+  <section class="block" id="p2p">
+    <span class="block-mark">04 · PEER TO PEER RAILS, THE ALTERNATIVE PATH</span>
+    <h2>When the regulated path doesn't reach where you are.</h2>
+    <p>In markets where banking infrastructure or regulated exchange access is limited or unreliable, <span class="term">peer to peer</span> platforms let individuals trade fiat for crypto directly with each other, with the platform typically providing escrow and dispute resolution rather than acting as a counterparty itself. This is a real, widely used rail across large parts of the world where the standard CEX on-ramp path is thin or absent.</p>
+    <p>The tradeoff is counterparty risk shifts from an institution to an individual. Use platforms with real reputation systems and enforced escrow, verify the counterparty's trade history before committing to a trade, and never release funds or confirm payment outside the platform's own escrow and dispute system.</p>
+  </section>
+
+  <section class="block" id="checklist">
+    <span class="block-mark">05 · CHOOSING AN ON-RAMP, THE ACTUAL CRITERIA</span>
+    <h2>Not the platform with the best ad. The one with the best receipts.</h2>
+    <div class="checklist">
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Check actual regulatory standing.</strong> A licensed, regulated exchange in your jurisdiction carries real legal recourse if something goes wrong. An unregulated platform doesn't.</div></div>
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Check the real total cost.</strong> Advertised fees rarely include the spread. Compare the actual amount of crypto received for a fixed fiat amount across two or three platforms before committing.</div></div>
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Check withdrawal limits and verification tiers.</strong> Some platforms cap withdrawals until deeper KYC tiers are completed, which can strand funds at the worst possible moment if you haven't verified in advance.</div></div>
+    </div>
+  </section>
+
+  <div class="punchline">The chain doesn't ask who you are. The door to it usually does. Know exactly where that line sits.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">Getting in is<br>a skill. Getting<br>out is <span class="acid">too</span>.</p>
+  <p>Part 15 covers DePIN, decentralized physical infrastructure, the category where crypto incentives are coordinating real world hardware, not just capital.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-13-bridges-and-interoperability.html">← PART 13, BRIDGES AND INTEROPERABILITY</a>
+    <a class="next-link" href="part-15-depin-and-real-world-infrastructure.html">NEXT · PART 15 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part covered <span class="term mono">on-ramps</span>, <span class="term mono">KYC</span>, <span class="term mono">off-ramps</span>, and peer to peer rails, the practical gap most guides skip entirely. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 14 OF 20 · ON-RAMPS AND OFF-RAMPS</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

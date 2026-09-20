@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regulation And Compliance</title>
+<meta name="description" content="The global regulatory patchwork actually governing web3, explained plainly, without the legal jargon.">
+<meta property="og:title" content="Regulation And Compliance">
+<meta property="og:description" content="The global regulatory patchwork actually governing web3, explained plainly, without the legal jargon.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Regulation And Compliance">
+<meta name="twitter:description" content="The global regulatory patchwork actually governing web3, explained plainly, without the legal jargon.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+  .hero { padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 7.2vw, 84px); line-height: 0.96; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 110px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 4.6vw, 44px); text-transform: uppercase; line-height: 1.05; margin-bottom: 26px; max-width: 560px; }
+  .block p { font-size: 17px; color: #D8D8D2; margin-bottom: 18px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 18px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 30px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+  .data-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; background: var(--hairline); margin: 32px 0; border: 1px solid var(--hairline); }
+  .data-cell { background: var(--panel); padding: 22px 18px; }
+  .data-cell .num { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--acid); display: block; }
+  .data-cell .label { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--ash); letter-spacing: 0.08em; text-transform: uppercase; }
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5.5vw, 52px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } section.block { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · EXTENSION PACK</div>
+  <div class="nav-progress">PART 19 OF 20</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE EXTENSION PACK · PART NINETEEN</span>
+  <h1>Regulation And<br>Compliance</h1>
+  <p class="sub">The global patchwork actually governing everything in this guide, explained plainly.</p>
+  <p class="lede">Every part before this one described mechanisms as if they exist in a vacuum. They don't. <strong>Law shapes what's actually usable, where, and by whom</strong>, and it varies enormously by jurisdiction. This isn't legal advice, it's the map you need before you go find a lawyer who actually knows your specific situation.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">SECURITY</span><span>·</span><span>COMMODITY</span><span>·</span>
+    <span class="hit">TRAVEL RULE</span><span>·</span><span>MiCA</span><span>·</span>
+    <span class="hit">JURISDICTION</span><span>·</span><span>LICENSING</span><span>·</span>
+    <span class="hit">SECURITY</span><span>·</span><span>COMMODITY</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="classification">
+    <span class="block-mark">01 · THE FIRST QUESTION EVERY REGULATOR ASKS</span>
+    <h2>Is this token a security, or isn't it.</h2>
+    <p>In the US, the classification question that decides almost everything else runs through the <span class="term">Howey Test</span>, a decades old legal standard asking whether an asset represents an investment of money in a common enterprise with an expectation of profit derived from the efforts of others. If yes, it's treated as a <span class="term">security</span>, triggering registration and disclosure requirements built for traditional finance, not for a decentralized protocol with no central issuer after launch.</p>
+    <p>This single question explains an enormous share of the regulatory conflict in this industry. A genuinely decentralized network with no ongoing dependence on a founding team's efforts has a real argument for not being a security. A token still heavily dependent on one team's continued work has a much weaker one. Most tokens sit somewhere in between, and reasonable regulators and reasonable lawyers disagree on where the line actually falls.</p>
+  </section>
+
+  <section class="block" id="jurisdictions">
+    <span class="block-mark">02 · THE SAME ACTIVITY, DIFFERENT RULES BY BORDER</span>
+    <h2>There is no single global standard. There are dozens, at once.</h2>
+    <div class="data-strip">
+      <div class="data-cell"><span class="num">US</span><span class="label">Fragmented across the SEC, CFTC, and state regulators, with jurisdiction itself often disputed</span></div>
+      <div class="data-cell"><span class="num">EU</span><span class="label">MiCA, Markets in Crypto-Assets, a unified licensing framework across all member states since 2024</span></div>
+      <div class="data-cell"><span class="num">NG</span><span class="label">Nigeria's SEC issued formal digital asset rules in 2022, later tightened around exchange licensing</span></div>
+      <div class="data-cell"><span class="num">AE</span><span class="label">UAE built dedicated crypto free zones with their own regulatory regimes, attracting exchanges directly</span></div>
+    </div>
+    <p>The same protocol can be fully compliant in one jurisdiction and operating in a legal gray zone in another, simultaneously, with no contradiction, because the rules genuinely differ. This is why global protocols increasingly geofence certain features by user location, not as an inconvenience, but as a direct response to this exact fragmentation.</p>
+  </section>
+
+  <section class="block" id="aml">
+    <span class="block-mark">03 · AML AND THE TRAVEL RULE</span>
+    <h2>Where the KYC from Part 14 actually leads.</h2>
+    <p><span class="term">Anti money laundering</span> requirements are why the KYC process from Part 14 exists at exchanges in the first place. The <span class="term">Travel Rule</span>, an international standard, requires regulated financial institutions, exchanges included, to share sender and receiver identity information for transactions above a set threshold, mirroring requirements that have existed in traditional banking for decades.</p>
+    <p>This is the direct regulatory pressure point behind the privacy tech tension covered in Part 16. A mixer or privacy coin that obscures the sender and receiver makes Travel Rule compliance structurally impossible, which is exactly why regulated exchanges in most jurisdictions have delisted or restricted them, independent of any court ruling on the underlying legality.</p>
+  </section>
+
+  <section class="block" id="practical">
+    <span class="block-mark">04 · WHAT THIS ACTUALLY MEANS FOR YOU, PRACTICALLY</span>
+    <h2>Not legal advice. A checklist for finding real legal advice.</h2>
+    <p class="callout">Nothing in this guide is legal advice, and anyone telling you otherwise online, for free, in a Discord server, should be your first red flag, not your source of truth. Regulation changes fast, varies by exact jurisdiction, and the cost of getting it wrong, for a builder especially, is real. If you're building a protocol, launching a token, or running a business around any of this, a real securities lawyer familiar with your specific jurisdiction is not optional overhead, it's the actual cost of doing this correctly.</p>
+    <p>For individual users, know your own jurisdiction's rules on capital gains treatment for crypto transactions, and keep your own transaction records regardless of what any exchange provides. Regulatory clarity in this industry is trending toward more structure over time, not less, in most major jurisdictions. Build and operate accordingly.</p>
+  </section>
+
+  <div class="punchline">The chain doesn't ask permission. The regulator who oversees the human using it might. Know the difference and plan for both.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">Mechanism is<br>global. Law is<br><span class="acid">local</span>. Plan for both.</p>
+  <p>Part 20 closes the Extension Pack with prediction markets, where information itself becomes the tradeable asset.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-18-gaming-and-socialfi.html">← PART 18, WEB3 GAMING AND SOCIALFI</a>
+    <a class="next-link" href="part-20-prediction-markets.html">NEXT · PART 20 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part covered <span class="term mono">token classification</span>, the <span class="term mono">global regulatory patchwork</span>, and the <span class="term mono">Travel Rule</span>, without pretending to be legal advice. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 19 OF 20 · REGULATION AND COMPLIANCE</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Job Board — Mr White's Lab</title>
+<meta name="description" content="Every real web3 job, explained plainly. What you do, what skills you need, how to start, how pay works. Searchable, growing.">
+<meta property="og:title" content="The Job Board — Mr White's Lab">
+<meta property="og:description" content="Every real web3 job, explained plainly. What you do, what skills you need, how to start, how pay works.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Job Board — Mr White's Lab">
+<meta name="twitter:description" content="Every real web3 job, explained plainly. What you do, what skills you need, how to start, how pay works.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --panel-raised: #161613; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav a.index-link { display: inline-block; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: var(--ash); border-bottom: 1px solid var(--hairline); padding: 12px 4px; margin: -12px -4px; }
+  .nav a.index-link:hover { color: var(--acid); border-color: var(--acid); }
+
+  .hero { padding: clamp(50px, 10vh, 110px) clamp(20px, 6vw, 64px) 50px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 24px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(46px, 9vw, 104px); line-height: 0.92; text-transform: uppercase; margin-bottom: 20px; }
+  .hero .sub { font-size: clamp(17px, 2.2vw, 21px); color: var(--ash); max-width: 600px; }
+  .hero .count { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--acid); margin-top: 20px; display: block; }
+
+  .search-bar-wrap { position: sticky; top: 65px; z-index: 40; background: var(--black); border-bottom: 1px solid var(--hairline); padding: 20px clamp(20px, 6vw, 64px); }
+  .search-inner { max-width: 920px; margin: 0 auto; }
+  .search-input {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--hairline);
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    padding: 16px 18px;
+    outline: none;
+  }
+  .search-input:focus { border-color: var(--acid); }
+  .search-input::placeholder { color: var(--ash-dim); }
+
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .filter-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--ash);
+    background: var(--panel);
+    border: 1px solid var(--hairline);
+    padding: 9px 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+  .filter-chip:hover { border-color: var(--ash); color: var(--white); }
+  .filter-chip.active { background: var(--acid); border-color: var(--acid); color: var(--black); font-weight: 700; }
+
+  .results-meta { max-width: 920px; margin: 24px auto 0; padding: 0 clamp(20px, 6vw, 64px); font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+
+  .board { max-width: 920px; margin: 0 auto; padding: 24px clamp(20px, 6vw, 64px) 100px; display: flex; flex-direction: column; gap: 1px; background: var(--hairline); border: 1px solid var(--hairline); }
+
+  .role-card { background: var(--black); }
+  .role-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 20px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .role-head:hover { background: var(--panel); }
+  .role-head-left { min-width: 0; }
+  .role-cat { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--acid); letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+  .role-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(22px, 3.6vw, 28px); text-transform: uppercase; color: var(--white); line-height: 1.1; }
+  .role-oneline { font-size: 13.5px; color: var(--ash); margin-top: 4px; }
+  .role-toggle { font-family: 'Space Mono', monospace; color: var(--acid); font-size: 20px; flex-shrink: 0; transition: transform 0.2s ease; }
+  .role-card.open .role-toggle { transform: rotate(45deg); }
+
+  .role-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+    background: var(--panel);
+  }
+  .role-card.open .role-body { max-height: 2000px; }
+  .role-body-inner { padding: 6px 20px 28px; }
+
+  .role-section { margin-top: 20px; }
+  .role-section-label { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: var(--acid); text-transform: uppercase; display: block; margin-bottom: 8px; }
+  .role-section p { font-size: 15px; color: #D8D8D2; margin-bottom: 8px; }
+  .role-section ul { padding-left: 18px; }
+  .role-section li { font-size: 15px; color: #D8D8D2; margin-bottom: 6px; }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .skill-tag { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--ash); border: 1px solid var(--hairline); padding: 4px 9px; }
+
+  .no-results { text-align: center; padding: 60px 20px; color: var(--ash); font-family: 'Space Mono', monospace; font-size: 14px; }
+
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · JOB BOARD</div>
+  <a class="index-link" href="index.html">← ALL PARTS</a>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE JOB BOARD · A GROWING DATABASE</span>
+  <h1>Every Web3 Job,<br>Plainly Explained.</h1>
+  <p class="sub">What the job actually is. What you do every day. What skills you need. How you actually start. How the pay works. No jargon left unexplained.</p>
+  <span class="count" id="role-count">20 roles listed, more added over time.</span>
+</header>
+
+<div class="search-bar-wrap">
+  <div class="search-inner">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search a job, a skill, a tool...">
+    <div class="filters" id="filterChips"></div>
+  </div>
+</div>
+
+<div class="results-meta" id="resultsMeta"></div>
+
+<main class="board" id="board"></main>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This board grows over time. New roles get added the same way the first twenty were, plain language, real detail, no filler. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+      <a href="index.html">All 20 Parts</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · THE JOB BOARD</div>
+  </div>
+</footer>
+
+<script>
+// ============================================================
+// ROLE DATABASE
+// To add a new role later: copy one object below, change every
+// field, and add it to the ROLES array. Nothing else needs to
+// change, the search, filters, and cards all read from this list.
+// ============================================================
+const ROLES = [
+  {
+    name: "KOL / Content Creator",
+    category: "Growth & Content",
+    oneLiner: "You already have people who trust what you say. Protocols pay you to say true things about them.",
+    whatYouDo: [
+      "Post about a protocol's product, honestly, in your own voice.",
+      "Make threads, videos, or short clips explaining what a project does.",
+      "Join spaces or calls to talk about the product with your audience.",
+      "Report back to the project on what your audience actually asked or cared about."
+    ],
+    skills: ["Clear writing", "A real, engaged audience, even a small one", "Basic understanding of the product you're covering", "Honesty, this is the whole job"],
+    howToStart: [
+      "Post consistently about one topic for a few months before you ever pitch anyone.",
+      "Build a small, real audience before chasing a large fake one.",
+      "Reach out to projects you already use and like, not ones you've never touched.",
+      "Keep a simple record of your past posts and their real engagement to show projects later."
+    ],
+    pay: "Usually a flat fee per post or per campaign, sometimes a mix of cash and the project's own token. Bigger accounts can negotiate a monthly retainer instead of one-off payments.",
+    tools: ["X", "Discord", "Telegram", "A link tracker for referrals"]
+  },
+  {
+    name: "Community Manager",
+    category: "Growth & Content",
+    oneLiner: "You keep a project's Discord or Telegram alive, useful, and free of scammers.",
+    whatYouDo: [
+      "Answer questions from users, every day, sometimes the same question a hundred times.",
+      "Remove spam, scam links, and fake support accounts before they trick anyone.",
+      "Run small events, quizzes, AMAs, giveaways, to keep the server active.",
+      "Tell the team what users are confused about or angry about, clearly and often."
+    ],
+    skills: ["Patience", "Clear, calm writing", "Basic moderation tools", "Comfortable saying no to angry people"],
+    howToStart: [
+      "Become an active, helpful member of a community before ever applying to run one.",
+      "Volunteer as an unpaid moderator first, many teams hire straight from their own volunteer pool.",
+      "Learn one moderation bot well, like MEE6 or Discord's own tools, before you need to use it under pressure.",
+      "Build a short portfolio, screenshots of you helping people, resolving conflicts, catching scams."
+    ],
+    pay: "Usually a fixed monthly amount, paid in stablecoins or the project's token, sometimes both. Rate depends heavily on how active and how large the community is.",
+    tools: ["Discord", "Telegram", "MEE6 or similar moderation bots", "A ticketing system for support requests"]
+  },
+  {
+    name: "Ambassador",
+    category: "Growth & Content",
+    oneLiner: "A part time, ongoing role representing one project across multiple places at once.",
+    whatYouDo: [
+      "Post about the project regularly, answer questions about it wherever you see them.",
+      "Represent the project in other communities, spaces, and events.",
+      "Give the team direct feedback from users you talk to.",
+      "Sometimes run small local or regional meetups if the project has that budget."
+    ],
+    skills: ["Genuine familiarity with the product", "Comfortable talking to strangers online", "Some writing or speaking ability", "Reliability, showing up matters more than talent here"],
+    howToStart: [
+      "Look for a project's official ambassador program page, most large ones publish one.",
+      "Apply with proof you already engage with the project, not just interest in the reward.",
+      "Start small, many programs have tiers, prove yourself at the entry tier first.",
+      "Read Part 09 of this guide before joining any program, it explains exactly how to spot a bad one."
+    ],
+    pay: "Wide range, some programs pay nothing but exposure and early access, some pay a real monthly stipend plus token rewards. Read the terms before joining, not after.",
+    tools: ["X", "Discord", "Whatever the specific project uses internally"]
+  },
+  {
+    name: "BD / Partnerships Manager",
+    category: "Growth & Content",
+    oneLiner: "You find and close deals between your project and other projects, exchanges, or creators.",
+    whatYouDo: [
+      "Research who's worth partnering with and why.",
+      "Reach out cold, with a specific, useful reason for that project to talk to you.",
+      "Negotiate terms, timelines, and what each side actually delivers.",
+      "Make sure the partnership actually gets executed after it's announced, not just tweeted about."
+    ],
+    skills: ["Cold outreach that doesn't sound like spam", "Reading a deal for what's actually fair", "Follow-through, most BD people are bad at this part", "Understanding both sides' actual incentives"],
+    howToStart: [
+      "Read Part 09 of this guide, this exact role is covered there in depth.",
+      "Practice the insight-first outreach method, lead with a real observation, not an ask.",
+      "Start by helping a small project close one real deal, unpaid if needed, to build proof.",
+      "Keep a simple log of every deal you've helped close, with real outcomes, not just intros made."
+    ],
+    pay: "Often a base retainer plus a bonus or commission tied to deals actually closed. Some roles are pure commission, higher risk, higher upside if you're good at it.",
+    tools: ["A CRM or even just a spreadsheet", "X and Telegram for outreach", "Notion or Google Docs for deal terms"]
+  },
+  {
+    name: "Growth Marketer",
+    category: "Growth & Content",
+    oneLiner: "You're responsible for getting more real users into a protocol, and proving it with numbers.",
+    whatYouDo: [
+      "Plan campaigns across ads, content, and creator partnerships.",
+      "Track which channels actually bring users who stick around, not just clicks.",
+      "Run referral programs and test which incentives actually work.",
+      "Report real numbers to the team, including the campaigns that failed."
+    ],
+    skills: ["Comfortable with basic analytics tools", "Understanding of on-chain metrics, not just social metrics", "Budget management", "Honest reporting, even when the news is bad"],
+    howToStart: [
+      "Learn to read a block explorer and basic on-chain analytics dashboards.",
+      "Run a small campaign for a project you already work with, even a free one, and measure it properly.",
+      "Study Part 09 of this guide for how referral tracking and campaign structure actually work.",
+      "Build a simple case study, one campaign, real numbers, what worked and what didn't."
+    ],
+    pay: "Usually a monthly salary or retainer, sometimes with a performance bonus tied to user growth targets. Larger protocols pay closer to a traditional marketing salary.",
+    tools: ["Dune Analytics or similar on-chain dashboards", "Basic ad platforms", "A referral tracking tool"]
+  },
+  {
+    name: "Web3 Writer / Researcher",
+    category: "Content & Media",
+    oneLiner: "You explain complicated protocols in writing that a normal person can actually follow.",
+    whatYouDo: [
+      "Read a protocol's documentation and turn it into a clear article or thread.",
+      "Research a topic, a chain, a trend, and write up what you actually found.",
+      "Fact check your own claims before publishing, this industry punishes sloppy research fast.",
+      "Sometimes ghostwrite for a founder or project account."
+    ],
+    skills: ["Genuinely clear writing", "Comfortable reading technical documentation", "Basic fact checking habits", "Enough restraint to say 'I don't know' instead of guessing"],
+    howToStart: [
+      "Write and publish for free at first, a personal blog or newsletter works fine.",
+      "Pick one or two chains or topics and go deep instead of writing shallow pieces on everything.",
+      "Read this entire guide as an example of explaining mechanism without hype.",
+      "Reach out to smaller protocols who need documentation help before pitching large ones."
+    ],
+    pay: "Usually per article or per word for one-off work, or a monthly retainer for ongoing research output. Ghostwriting for a founder often pays better than public bylined work.",
+    tools: ["A block explorer", "Notion or Google Docs", "Whatever protocol's own documentation you're researching"]
+  },
+  {
+    name: "Video Editor / Content Producer",
+    category: "Content & Media",
+    oneLiner: "You turn raw footage, screen recordings, or ideas into finished videos people actually watch.",
+    whatYouDo: [
+      "Edit long or short form video, tutorials, recaps, hype clips.",
+      "Add captions, motion graphics, and sound to make content actually watchable.",
+      "Sometimes shoot or record the raw footage yourself.",
+      "Turn one long video into several short clips for different platforms."
+    ],
+    skills: ["A video editing tool, CapCut, Premiere, DaVinci Resolve", "An eye for pacing, knowing when a cut is too slow", "Basic motion graphics", "Speed, most of this work is turnaround based"],
+    howToStart: [
+      "Edit content for free or cheap for a few small creators to build a real portfolio.",
+      "Study how the edits you actually enjoy watching are paced and structured.",
+      "Post your own edited clips publicly so people can see your work without asking.",
+      "Learn one editing tool deeply rather than several tools shallowly."
+    ],
+    pay: "Usually per video or per minute of finished content, sometimes a monthly retainer for a set number of videos. Short form clips pay less individually but scale in volume.",
+    tools: ["CapCut", "Adobe Premiere", "DaVinci Resolve", "Canva for quick graphics"]
+  },
+  {
+    name: "Graphic Designer / Brand Designer",
+    category: "Content & Media",
+    oneLiner: "You make a project actually look like something worth trusting.",
+    whatYouDo: [
+      "Design logos, banners, and visual identity for a project.",
+      "Make social media graphics, thread headers, and announcement visuals.",
+      "Sometimes design full pitch decks or investor materials.",
+      "Keep everything consistent with the project's existing brand rules."
+    ],
+    skills: ["Figma or Adobe Illustrator", "An actual eye for what looks clean versus cluttered", "Speed, requests are often needed same day", "Willingness to take feedback without ego"],
+    howToStart: [
+      "Build a portfolio with a few strong, finished pieces rather than many rough ones.",
+      "Offer free or cheap rebrand concepts to small projects to build real examples.",
+      "Study this guide's own visual system as one example of a complete, consistent brand.",
+      "Post your work publicly, design work gets noticed visually faster than almost any other skill here."
+    ],
+    pay: "Per project for one-off work like a logo or deck, or a monthly retainer for ongoing social graphics. Full brand identity packages pay significantly more than single pieces.",
+    tools: ["Figma", "Adobe Illustrator", "Canva for quick turnaround pieces"]
+  },
+  {
+    name: "Translator / Localization",
+    category: "Content & Media",
+    oneLiner: "You make a project's content actually readable outside English.",
+    whatYouDo: [
+      "Translate documentation, announcements, and marketing content into another language.",
+      "Adjust tone and phrasing so it reads naturally, not just word for word.",
+      "Sometimes manage a local community in your language directly.",
+      "Flag cultural context the original English content missed."
+    ],
+    skills: ["Fluent, natural writing in both languages", "Understanding of basic web3 terms in both languages", "Reliability on deadlines", "Cultural context, not just word-for-word translation"],
+    howToStart: [
+      "Translate a piece of existing public content as a sample, unpaid, to show real quality.",
+      "Look for projects actively expanding into your region, they need this most urgently.",
+      "Join local language communities for major chains, roles often get filled from inside them.",
+      "Build a short portfolio of before and after translation samples."
+    ],
+    pay: "Usually per word or per document for one-off translation, or a monthly rate if you're also managing a local community. Ongoing localization work pays better than single documents.",
+    tools: ["Whatever the project's own documents use, Notion, Google Docs", "DeepL for a first pass, never the final version"]
+  },
+  {
+    name: "Social Media Manager",
+    category: "Content & Media",
+    oneLiner: "You run a project's actual public accounts, day to day.",
+    whatYouDo: [
+      "Write and schedule posts across X, Telegram, and wherever else the project lives.",
+      "Reply to comments and mentions, keeping the tone consistent with the brand.",
+      "Track what's actually performing and adjust the posting plan.",
+      "Coordinate with designers and video editors to keep a steady content flow."
+    ],
+    skills: ["Strong grasp of the platform's actual culture, not just posting into the void", "Basic scheduling tools", "Fast, clear writing", "Comfortable handling public criticism calmly"],
+    howToStart: [
+      "Run your own accounts actively first, understand the platform from the inside.",
+      "Offer to manage a small project's account for a trial period to build proof.",
+      "Study accounts that do this well, note what they post and when.",
+      "Build a simple content calendar template you can show projects as a work sample."
+    ],
+    pay: "Usually a monthly retainer, scaled to how many platforms and how much daily output is expected. Larger accounts with real engagement targets pay more.",
+    tools: ["Typefully or Buffer for scheduling", "Canva for quick graphics", "Analytics dashboards for each platform"]
+  },
+  {
+    name: "Smart Contract Developer",
+    category: "Technical",
+    oneLiner: "You write the actual code that runs on chain and moves real money.",
+    whatYouDo: [
+      "Write and test smart contracts, usually in Solidity, Rust, or a chain-specific language.",
+      "Fix bugs and optimize code so it costs less gas to run.",
+      "Work with auditors to fix flagged security issues before launch.",
+      "Sometimes build the entire backend logic of a protocol from scratch."
+    ],
+    skills: ["A programming language, Solidity is the most common starting point", "Understanding of how blockchains actually work, covered in Part 03 of this guide", "Security mindset, one bug here can lose real money", "Comfortable reading other people's code"],
+    howToStart: [
+      "Learn to code first, generally, before specializing in smart contracts specifically.",
+      "Work through free courses like CryptoZombies or Solidity's own official documentation.",
+      "Build small, real projects and put the code publicly on GitHub.",
+      "Contribute to an open source protocol's codebase before applying anywhere paid."
+    ],
+    pay: "This is one of the highest paid roles in the entire industry. Usually a strong monthly salary, sometimes with a token allocation on top for early team members.",
+    tools: ["Solidity or Rust", "Hardhat or Foundry", "GitHub", "A testnet wallet"]
+  },
+  {
+    name: "Frontend Developer (dApps)",
+    category: "Technical",
+    oneLiner: "You build the actual website or app people click through to use a protocol.",
+    whatYouDo: [
+      "Build the user interface that connects to smart contracts.",
+      "Integrate wallet connections, like MetaMask or WalletConnect, so users can actually sign transactions.",
+      "Make the app work smoothly on both desktop and mobile.",
+      "Fix bugs users actually report, often urgently."
+    ],
+    skills: ["JavaScript and a framework like React", "Understanding of how wallets and signing actually work, covered in Part 02", "Basic Web3.js or Ethers.js knowledge", "Design sense, or a willingness to work closely with a designer"],
+    howToStart: [
+      "Learn standard web development first, HTML, CSS, JavaScript, React.",
+      "Then learn the Web3 specific libraries that connect a frontend to a blockchain.",
+      "Build a small working dApp yourself, even something simple, and put it live.",
+      "Contribute to an open source frontend project to build real, visible experience."
+    ],
+    pay: "Strong salary range, generally in line with or slightly above traditional frontend development, plus the possibility of a token allocation.",
+    tools: ["React", "Ethers.js or Web3.js", "MetaMask for testing", "A code editor like VS Code"]
+  },
+  {
+    name: "Protocol / Backend Engineer",
+    category: "Technical",
+    oneLiner: "You build the infrastructure underneath a chain or protocol that most users never directly see.",
+    whatYouDo: [
+      "Build and maintain node infrastructure, indexers, or APIs a protocol depends on.",
+      "Optimize how data moves between the chain and the applications built on top of it.",
+      "Work closely with smart contract developers to make sure everything actually connects correctly.",
+      "Handle scaling issues as usage grows."
+    ],
+    skills: ["Strong general backend engineering skills", "Understanding of blockchain architecture, covered in Part 03 and Part 04", "Comfortable with distributed systems", "Database and API design"],
+    howToStart: [
+      "Build a strong general backend engineering foundation first.",
+      "Study how a specific chain's node infrastructure actually works, start with documentation.",
+      "Run your own node for a testnet to understand the mechanics hands-on.",
+      "Contribute to infrastructure-focused open source projects."
+    ],
+    pay: "Strong salary, often at the higher end of technical roles in this industry given how specialized the skill set is.",
+    tools: ["A chain's own node software", "PostgreSQL or similar databases", "Docker", "GitHub"]
+  },
+  {
+    name: "Smart Contract Auditor",
+    category: "Technical",
+    oneLiner: "You're paid to find the bugs before an attacker does. Covered in Part 10 of this guide.",
+    whatYouDo: [
+      "Read through a protocol's smart contract code line by line.",
+      "Look for known vulnerability patterns, reentrancy, oracle manipulation, access control mistakes.",
+      "Write a clear report explaining exactly what you found and how serious it is.",
+      "Sometimes re-review the code after the team fixes what you flagged."
+    ],
+    skills: ["Deep smart contract development knowledge first", "Security specific training on top of that", "Extremely careful, methodical reading habits", "Clear technical writing for the final report"],
+    howToStart: [
+      "Become a strong smart contract developer before trying to audit other people's code.",
+      "Study past real exploits, several are named directly in Part 10 of this guide.",
+      "Enter audit competitions on platforms that run public bug bounty contests.",
+      "Build a track record of real vulnerabilities found before applying to formal audit firms."
+    ],
+    pay: "Among the highest paid work in this entire industry, priced per audit engagement, scaled heavily by the protocol's size and the complexity of the code.",
+    tools: ["Slither and similar static analysis tools", "Foundry for testing exploits", "A deep personal library of past exploit writeups"]
+  },
+  {
+    name: "Data Analyst (On-Chain)",
+    category: "Technical",
+    oneLiner: "You turn raw blockchain data into charts and answers people can actually use.",
+    whatYouDo: [
+      "Query on-chain data directly to answer real questions, how many users, how much volume, where funds are moving.",
+      "Build public dashboards tracking a protocol's health.",
+      "Write research reports backed by real on-chain numbers, not guesses.",
+      "Flag unusual on-chain activity, sometimes catching exploits or wash trading early."
+    ],
+    skills: ["SQL, this is the core skill for this role", "Understanding of how blockchain data is actually structured", "Basic data visualization", "Skepticism, on-chain data lies just as easily as any other kind if you don't check it"],
+    howToStart: [
+      "Learn SQL, genuinely, it's the single most useful skill for this specific role.",
+      "Practice on free platforms like Dune Analytics using real public blockchain data.",
+      "Publish your own dashboards publicly, this is a role where your public work speaks for itself.",
+      "Pick one chain or protocol and become the person who knows its numbers best."
+    ],
+    pay: "Ranges from project-based research fees to a full monthly retainer for ongoing dashboard maintenance. Strong on-chain analysts are in real demand.",
+    tools: ["Dune Analytics", "SQL", "Python for deeper analysis", "Excel or Google Sheets for simpler reports"]
+  },
+  {
+    name: "Research Analyst",
+    category: "Trading & Research",
+    oneLiner: "You study protocols, tokens, and markets, and write up what you actually think, with reasons.",
+    whatYouDo: [
+      "Deep dive a protocol's tokenomics, team, and product before forming a view.",
+      "Write research reports for a fund, a community, or your own public audience.",
+      "Track a portfolio or watchlist of projects over time, not just at launch.",
+      "Call out weak projects honestly, even when it's not popular to do so."
+    ],
+    skills: ["Genuine curiosity and skepticism", "Comfortable reading whitepapers and technical documentation", "Basic tokenomics understanding, covered in Part 12's vault", "Clear writing to explain your conclusions"],
+    howToStart: [
+      "Pick projects and actually research them deeply, publicly, before anyone's paying you to.",
+      "Build a track record people can check later against what actually happened.",
+      "Study how established research desks structure their reports, then build your own format.",
+      "Apply to funds or research collectives once you have real public work to point to."
+    ],
+    pay: "Ranges from a salary at a fund or research firm to a per-report freelance rate. Funds generally pay the most for consistently accurate research.",
+    tools: ["A block explorer", "Dune Analytics", "Twitter/X for real time sentiment", "Notion for report writing"]
+  },
+  {
+    name: "Market Maker / Trader",
+    category: "Trading & Research",
+    oneLiner: "You provide liquidity or trade directly, professionally, not just speculating casually. Covered in Part 08.",
+    whatYouDo: [
+      "Provide consistent buy and sell liquidity for a token to keep its market functional.",
+      "Run trading strategies, sometimes automated, sometimes manual.",
+      "Manage real risk limits so one bad move doesn't wipe out the desk.",
+      "Report performance clearly, including losses, to whoever you're trading for."
+    ],
+    skills: ["Deep understanding of market structure, covered fully in Part 08", "Risk management discipline", "Comfortable with real financial losses as part of the job", "Often some coding ability for automated strategies"],
+    howToStart: [
+      "Study market structure and derivatives deeply before risking real size, Part 08 and Part 17 cover this.",
+      "Practice with small amounts of your own capital first, track every result honestly.",
+      "Learn the basics of a scripting language if you want to move toward automated strategies.",
+      "This is one of the higher risk paths on this board, go in with real capital discipline, not excitement."
+    ],
+    pay: "Highly variable, often profit-share based rather than a flat salary. Real risk of loss, this isn't guaranteed income the way most other roles on this board are.",
+    tools: ["A trading terminal or exchange API", "Python for strategy automation", "A risk management spreadsheet or system"]
+  },
+  {
+    name: "Tokenomics Designer",
+    category: "Trading & Research",
+    oneLiner: "You design how a project's token actually works, its supply, its incentives, its long term survival.",
+    whatYouDo: [
+      "Design token supply, vesting schedules, and emission curves for a new project.",
+      "Model how different incentive structures play out over time before launch.",
+      "Advise founders on tradeoffs between growth incentives and long term token health.",
+      "Review existing tokenomics for flaws before a project scales further."
+    ],
+    skills: ["Strong grasp of incentive design and basic economics", "Comfortable with spreadsheet modeling", "Study of what's worked and failed before, covered in Part 12's vault", "Ability to explain complex tradeoffs simply to a founder"],
+    howToStart: [
+      "Study the tokenomics section in Part 12 of this guide as a starting foundation.",
+      "Analyze real, existing token models, both ones that held up and ones that collapsed.",
+      "Build sample tokenomics models for hypothetical projects to practice the actual modeling work.",
+      "This role is usually filled from people with strong research or trading backgrounds first."
+    ],
+    pay: "Often a project-based consulting fee for designing a token model, sometimes an ongoing advisory retainer plus a token allocation.",
+    tools: ["Spreadsheet modeling tools", "Token vesting calculators", "Case studies of real launches"]
+  },
+  {
+    name: "Community Moderator (Entry Level)",
+    category: "Operations",
+    oneLiner: "The most common first job in this entire industry. Everyone starts somewhere, this is often it.",
+    whatYouDo: [
+      "Watch chat, answer simple questions, remove obvious spam.",
+      "Escalate anything serious to the lead community manager.",
+      "Welcome new members and point them to the right resources.",
+      "Report basic activity to the team."
+    ],
+    skills: ["Basic reliability, showing up on schedule", "Calm tone even when people are rude", "Willingness to do repetitive work well", "No prior experience usually required"],
+    howToStart: [
+      "Genuinely, just start. Join communities you like and become a helpful, known presence.",
+      "Volunteer for free in a small community first, this is the most common entry point in this entire industry.",
+      "Ask directly if a project needs moderator help, many smaller teams are understaffed and will say yes.",
+      "This role is the easiest one on this board to actually start today, with zero prior experience."
+    ],
+    pay: "Often a small fixed monthly stipend, sometimes paid in the project's token, sometimes unpaid at the very start in exchange for experience and a reference.",
+    tools: ["Discord", "Telegram", "Basic moderation bots"]
+  },
+  {
+    name: "Project Manager / Operations",
+    category: "Operations",
+    oneLiner: "You make sure everyone else on this list actually finishes what they said they'd do, on time.",
+    whatYouDo: [
+      "Track deadlines across design, development, and marketing teams.",
+      "Run team meetings and keep everyone aligned on priorities.",
+      "Catch problems before they become emergencies.",
+      "Manage budgets and vendor relationships, including some roles on this exact board."
+    ],
+    skills: ["Strong organization, this is the whole job", "Comfortable managing people without formal authority over them", "Basic project management tools", "Calm under pressure when deadlines slip"],
+    howToStart: [
+      "Volunteer to organize something, anything, inside a community you're already part of.",
+      "Learn one project management tool well, Notion or Asana are common in this industry.",
+      "Build a track record of things you personally kept on schedule, even small ones.",
+      "This role is often filled from inside a team, someone who was already helping unofficially."
+    ],
+    pay: "Usually a steady monthly salary, closer to a traditional operations role than most other jobs on this board, sometimes with a token component.",
+    tools: ["Notion", "Asana or Trello", "Google Calendar", "Slack or Discord for team communication"]
+  },
+  {
+    name: "DAO Contributor / Governance Lead",
+    category: "Operations",
+    oneLiner: "You help a DAO actually function, covered in Part 07 of this guide.",
+    whatYouDo: [
+      "Write and review governance proposals before they go to a vote.",
+      "Help organize treasury spending decisions.",
+      "Explain governance decisions clearly to the wider community.",
+      "Sometimes chase quorum, literally reminding people to actually vote."
+    ],
+    skills: ["Clear writing for proposals", "Understanding of how DAO governance actually works, covered in Part 07", "Patience, governance moves slower than almost anything else in this industry", "Comfortable with public disagreement and debate"],
+    howToStart: [
+      "Join a DAO you actually care about and start participating in governance discussions.",
+      "Write your first proposal on something small before attempting anything large.",
+      "Read Part 07 of this guide closely, it covers exactly where DAOs succeed and fail.",
+      "Delegate roles inside active DAOs are often a realistic, visible entry point into this work."
+    ],
+    pay: "Often paid directly from the DAO's own treasury, either a fixed stipend or per proposal, decided through the DAO's own governance process.",
+    tools: ["Snapshot for voting", "Discord or Discourse for discussion", "The DAO's own governance forum"]
+  }
+];
+
+// ============================================================
+// RENDER LOGIC
+// ============================================================
+const categories = [...new Set(ROLES.map(r => r.category))];
+let activeCategory = "All";
+let searchTerm = "";
+
+function renderChips() {
+  const wrap = document.getElementById('filterChips');
+  const allChip = `<div class="filter-chip ${activeCategory === 'All' ? 'active' : ''}" data-cat="All">All</div>`;
+  const chips = categories.map(cat =>
+    `<div class="filter-chip ${activeCategory === cat ? 'active' : ''}" data-cat="${cat}">${cat}</div>`
+  ).join('');
+  wrap.innerHTML = allChip + chips;
+  wrap.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      activeCategory = chip.dataset.cat;
+      render();
+    });
+  });
+}
+
+function matchesSearch(role, term) {
+  if (!term) return true;
+  const haystack = [
+    role.name, role.category, role.oneLiner,
+    ...(role.skills || []), ...(role.tools || []),
+    ...(role.whatYouDo || []), ...(role.howToStart || [])
+  ].join(' ').toLowerCase();
+  return haystack.includes(term.toLowerCase());
+}
+
+function renderBoard() {
+  const board = document.getElementById('board');
+  const filtered = ROLES.filter(r =>
+    (activeCategory === "All" || r.category === activeCategory) &&
+    matchesSearch(r, searchTerm)
+  );
+
+  document.getElementById('resultsMeta').textContent =
+    `${filtered.length} role${filtered.length === 1 ? '' : 's'} shown`;
+
+  if (filtered.length === 0) {
+    board.innerHTML = `<div class="no-results">Nothing matches that search yet. Try a broader term.</div>`;
+    return;
+  }
+
+  board.innerHTML = filtered.map((role, i) => `
+    <div class="role-card" data-idx="${i}">
+      <div class="role-head" data-toggle="${i}">
+        <div class="role-head-left">
+          <span class="role-cat">${role.category}</span>
+          <div class="role-name">${role.name}</div>
+          <div class="role-oneline">${role.oneLiner}</div>
+        </div>
+        <div class="role-toggle">+</div>
+      </div>
+      <div class="role-body">
+        <div class="role-body-inner">
+          <div class="role-section">
+            <span class="role-section-label">What You Actually Do</span>
+            <ul>${role.whatYouDo.map(x => `<li>${x}</li>`).join('')}</ul>
+          </div>
+          <div class="role-section">
+            <span class="role-section-label">Skills You Need</span>
+            <div class="tag-row">${role.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>
+          </div>
+          <div class="role-section">
+            <span class="role-section-label">How To Actually Start</span>
+            <ul>${role.howToStart.map(x => `<li>${x}</li>`).join('')}</ul>
+          </div>
+          <div class="role-section">
+            <span class="role-section-label">How Pay Works</span>
+            <p>${role.pay}</p>
+          </div>
+          <div class="role-section">
+            <span class="role-section-label">Tools Used</span>
+            <div class="tag-row">${role.tools.map(t => `<span class="skill-tag">${t}</span>`).join('')}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  board.querySelectorAll('.role-head').forEach(head => {
+    head.addEventListener('click', () => {
+      head.closest('.role-card').classList.toggle('open');
+    });
+  });
+}
+
+function render() {
+  renderChips();
+  renderBoard();
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  searchTerm = e.target.value;
+  renderBoard();
+});
+
+document.getElementById('role-count').textContent = `${ROLES.length} roles listed, more added over time.`;
+
+render();
+</script>
+
+</body>
+</html>

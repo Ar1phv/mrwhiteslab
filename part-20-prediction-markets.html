@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prediction Markets</title>
+<meta name="description" content="Where information itself becomes the tradeable asset. The final part of the twenty part series.">
+<meta property="og:title" content="Prediction Markets">
+<meta property="og:description" content="Where information itself becomes the tradeable asset. The final part of the twenty part series.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Prediction Markets">
+<meta name="twitter:description" content="Where information itself becomes the tradeable asset. The final part of the twenty part series.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+  .hero { padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(46px, 8.4vw, 100px); line-height: 0.92; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 110px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 4.6vw, 44px); text-transform: uppercase; line-height: 1.05; margin-bottom: 26px; max-width: 560px; }
+  .block p { font-size: 17px; color: #D8D8D2; margin-bottom: 18px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 18px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 30px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(34px, 6vw, 58px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+  .final-mark { display: inline-flex; align-items: center; gap: 10px; font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.14em; border: 1px solid var(--hairline); padding: 10px 16px; margin-bottom: 28px; }
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } section.block { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · EXTENSION PACK</div>
+  <div class="nav-progress">PART 20 OF 20 · FINAL</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE EXTENSION PACK · PART TWENTY · CLOSING THE SERIES</span>
+  <h1>Prediction Markets</h1>
+  <p class="sub">Where information itself becomes the tradeable asset.</p>
+  <p class="lede">Twenty parts, one thread running through all of them. Markets price things. This last one prices the thing every other market secretly depends on, <strong>being right about the future</strong>. Fitting place to end.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">OUTCOME</span><span>·</span><span>MARKET PRICE AS PROBABILITY</span><span>·</span>
+    <span class="hit">RESOLUTION</span><span>·</span><span>ORACLE</span><span>·</span>
+    <span class="hit">WISDOM OF CROWDS</span><span>·</span>
+    <span class="hit">OUTCOME</span><span>·</span><span>RESOLUTION</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="mechanic">
+    <span class="block-mark">01 · HOW A PREDICTION MARKET ACTUALLY WORKS</span>
+    <h2>Betting on an outcome, priced as a probability.</h2>
+    <p>A <span class="term">prediction market</span> lets users trade shares tied to the outcome of a specific future event, an election, a rate decision, whether a protocol ships a feature by a stated date. A share priced at 70 cents on a dollar effectively represents the market's collective estimate that the outcome has roughly a 70 percent chance of happening, information genuinely useful independent of whether you ever place a trade yourself.</p>
+    <p>On chain versions, Polymarket being the clearest current example, run this through the same smart contract settlement mechanics covered throughout this guide, no bookmaker setting the odds, the market itself sets the price through the same supply and demand mechanics from Part 05's AMMs and Part 08's order books.</p>
+  </section>
+
+  <section class="block" id="wisdom">
+    <span class="block-mark">02 · WHY THE PRICE IS OFTEN MORE ACCURATE THAN THE EXPERTS</span>
+    <h2>Money attached to an opinion changes the opinion's quality.</h2>
+    <p>The <span class="term">wisdom of crowds</span> effect is well documented past crypto entirely, aggregated predictions from many independent, incentivized participants frequently outperform individual expert forecasts, because real financial stakes filter out low conviction noise in a way a casual opinion poll never does. Prediction markets are this effect turned into permanent, transparent infrastructure, running continuously instead of as a one off academic study.</p>
+    <p class="callout">This is the actual utility, past the speculation. A liquid prediction market on a real world event is often a better real time forecast than any single pundit or poll, because everyone with a financial stake in being right is actively correcting the price, all the time, in public.</p>
+  </section>
+
+  <section class="block" id="resolution">
+    <span class="block-mark">03 · RESOLUTION, THE HARDEST PROBLEM IN THE WHOLE DESIGN</span>
+    <h2>Who decides what actually happened.</h2>
+    <p>A prediction market's entire integrity depends on how it resolves, determining and confirming which outcome actually occurred, so contracts can settle correctly. This is the oracle problem from Part 08 in its purest form, a real world event has to get reported onto the chain accurately, and disputed resolutions, ambiguous event wording, or a compromised resolution source can undermine an otherwise well designed market entirely.</p>
+    <p>Some platforms use decentralized dispute mechanisms, a token holder vote resolving contested outcomes. Others lean on a more centralized resolution source. Check a market's resolution mechanism before trusting a large position to it, the same way Part 08 said to check an oracle before trusting a perpetual position to it.</p>
+  </section>
+
+  <div class="punchline">Every market in this guide prices something. This one prices the future itself, and the price is usually more honest than the headlines arguing about it.</div>
+
+</main>
+
+<div class="close">
+  <span class="final-mark">END OF THE COMPLETE SERIES · 20 PARTS</span>
+  <p class="signoff">Twenty parts.<br>Zero filler.<br>Now go <span class="acid">operate</span>.</p>
+  <p>That's the complete guide, core twelve, the vault, and the eight part extension. If it earned a follow, I'm at the link below, same standard every time, mechanism first, no hype.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-19-regulation-and-compliance.html">← PART 19, REGULATION AND COMPLIANCE</a>
+    <a class="next-link" href="index.html">BACK TO INDEX →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part, and the full series, covered <span class="term mono">prediction markets</span>, the wisdom of crowds, and the resolution problem, closing twenty parts total. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 20 OF 20 · PREDICTION MARKETS</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

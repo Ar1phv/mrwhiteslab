@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web3 Gaming And SocialFi</title>
+<meta name="description" content="Where token incentives meet entertainment and social platforms, and why most of the first wave failed.">
+<meta property="og:title" content="Web3 Gaming And SocialFi">
+<meta property="og:description" content="Where token incentives meet entertainment and social platforms, and why most of the first wave failed.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Web3 Gaming And SocialFi">
+<meta name="twitter:description" content="Where token incentives meet entertainment and social platforms, and why most of the first wave failed.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav-progress { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.1em; }
+  .hero { padding: clamp(60px, 12vh, 140px) clamp(20px, 6vw, 64px) 80px; max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(42px, 7.6vw, 92px); line-height: 0.95; text-transform: uppercase; margin-bottom: 28px; }
+  .hero .sub { font-size: clamp(18px, 2.4vw, 24px); color: var(--ash); max-width: 620px; }
+  .hero .lede { margin-top: 40px; font-size: 18px; color: var(--white); max-width: 640px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 48px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.14em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+  .article { max-width: 720px; margin: 0 auto; padding: 100px clamp(20px, 6vw, 64px) 60px; }
+  section.block { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; margin-bottom: 110px; }
+  section.block.in-view { opacity: 1; transform: translateY(0); }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 18px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 4.6vw, 44px); text-transform: uppercase; line-height: 1.05; margin-bottom: 26px; max-width: 560px; }
+  .block p { font-size: 17px; color: #D8D8D2; margin-bottom: 18px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 18px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 30px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+  .punchline { font-family: 'Space Mono', monospace; font-size: 17px; color: var(--acid); margin: 40px 0; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+  .close { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 140px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5.5vw, 52px); text-transform: uppercase; line-height: 1.05; max-width: 620px; margin-bottom: 20px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 36px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .prev-link { color: var(--ash); border-color: var(--hairline); }
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-note .term { font-size: 14px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } section.block { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · EXTENSION PACK</div>
+  <div class="nav-progress">PART 18 OF 20</div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">THE EXTENSION PACK · PART EIGHTEEN</span>
+  <h1>Web3 Gaming<br>And SocialFi</h1>
+  <p class="sub">Where token incentives meet entertainment and social platforms, and why most of the first wave failed.</p>
+  <p class="lede">Two categories, one shared lesson. Both promised to fuse crypto incentives directly into games and social platforms people already loved. <strong>The first wave mostly failed</strong>, for a specific, avoidable reason this part actually names.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">PLAY TO EARN</span><span>·</span><span>IN-GAME ASSET</span><span>·</span>
+    <span class="hit">CREATOR TOKEN</span><span>·</span><span>ENGAGEMENT MINING</span><span>·</span>
+    <span class="hit">SUSTAINABILITY</span><span>·</span>
+    <span class="hit">PLAY TO EARN</span><span>·</span><span>CREATOR TOKEN</span>
+  </div>
+</div>
+
+<main class="article">
+
+  <section class="block" id="p2e">
+    <span class="block-mark">01 · PLAY TO EARN, THE FIRST WAVE AND WHY IT BROKE</span>
+    <h2>Paying players in a token nobody outside the game wanted.</h2>
+    <p><span class="term">Play to earn</span> games reward players with tokens or NFT assets for in game activity, tradeable and cashable outside the game itself. Axie Infinity was the breakout example in 2021, players in the Philippines and elsewhere earning meaningful real income from gameplay at its peak, a genuinely novel outcome worth taking seriously.</p>
+    <p>The collapse followed the exact yield sustainability pattern from Part 05. New player deposits funded existing player rewards, not real external revenue, a structure that only holds while the player base keeps growing. When new player growth slowed, the token price collapsed, and the entire earn loop broke for everyone still playing. The game mechanic was real. The token economy underneath it wasn't sustainable, and those are two separate questions that got conflated at the peak of the hype.</p>
+  </section>
+
+  <section class="block" id="fun-first">
+    <span class="block-mark">02 · THE SECOND WAVE, FUN FIRST, TOKEN SECOND</span>
+    <h2>Learning from the exact failure above.</h2>
+    <p>Newer web3 games are increasingly built with actual gameplay as the primary product, and on chain ownership of in game assets as a secondary feature layered on top, rather than the entire pitch. This flips the Axie Infinity order of operations. A game people would play without any token attached, with genuine on chain asset ownership added, has a real chance of surviving a market downturn that a pure earn mechanic never could.</p>
+    <p class="callout">The tell to check for, would this game have any players if the token dropped to zero tomorrow. If the honest answer is no, you're looking at a yield farm wearing a game's skin, the exact pattern from Part 05, just reskinned.</p>
+  </section>
+
+  <section class="block" id="socialfi">
+    <span class="block-mark">03 · SOCIALFI, TOKENIZING ATTENTION DIRECTLY</span>
+    <h2>Turning follower engagement into a tradeable asset.</h2>
+    <p><span class="term">SocialFi</span> platforms let creators or their content directly tie to a tradeable token or NFT, friend.tech's key mechanic being the clearest example, where owning a creator's "keys" grants access to their private chat, with the keys themselves trading on a bonding curve tied to demand. This directly monetizes what Part 09 called rented trust, except now the trust itself becomes the tradeable asset instead of just the campaign built on top of it.</p>
+    <p>The same sustainability question applies here as everywhere else in this part. Early SocialFi platforms saw huge initial volume followed by steep drop offs once the novelty faded and the underlying utility, in most cases, didn't extend much past speculation on the token itself. Watch for platforms building real retained utility past the initial trading frenzy, that's the signal separating a real product from a temporary mechanic.</p>
+  </section>
+
+  <div class="punchline">Fun and utility have to come first. The token is the reward layer, never the whole product.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">If the token<br>is the whole<br>pitch, it's <span class="acid">temporary</span>.</p>
+  <p>Part 19 covers regulation and compliance, the global patchwork of law actually governing everything covered in this guide, explained plainly.</p>
+  <div class="link-row">
+    <a class="next-link prev-link" href="part-17-derivatives-beyond-perps.html">← PART 17, DERIVATIVES BEYOND PERPS</a>
+    <a class="next-link" href="part-19-regulation-and-compliance.html">NEXT · PART 19 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This part covered <span class="term mono">play to earn</span>, sustainable game design, and <span class="term mono">SocialFi</span>, tokenized attention platforms. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. No hype. Just mechanism.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · PART 18 OF 20 · WEB3 GAMING AND SOCIALFI</div>
+  </div>
+</footer>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  blocks.forEach(b => io.observe(b));
+</script>
+
+</body>
+</html>

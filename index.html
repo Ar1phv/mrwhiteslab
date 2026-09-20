@@ -32,6 +32,7 @@
   .nav-mark strong { color: var(--white); font-weight: 700; }
   .nav a.author-link { display: inline-block; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: var(--ash); border-bottom: 1px solid var(--hairline); padding: 12px 4px; margin: -12px -4px; }
   .nav a.author-link:hover { color: var(--acid); border-color: var(--acid); }
+  .nav-links { display: flex; gap: 22px; align-items: center; }
 
   .hero { padding: clamp(70px, 14vh, 150px) clamp(20px, 6vw, 64px) 70px; max-width: 920px; margin: 0 auto; }
   .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 28px; display: block; }
@@ -67,6 +68,31 @@
 
   .vault-item .toc-num { color: var(--acid); }
 
+  .tier-divider {
+    margin: 60px 0 20px;
+    padding-top: 40px;
+    border-top: 1px solid var(--hairline);
+  }
+  .tier-label { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--acid); margin-bottom: 8px; display: block; }
+  .tier-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(24px, 4vw, 34px); text-transform: uppercase; color: var(--white); }
+  .tier-desc { font-size: 14px; color: var(--ash); margin-top: 6px; max-width: 500px; }
+
+  .jobboard-callout {
+    max-width: 920px;
+    margin: 0 auto 60px;
+    padding: 0 clamp(20px, 6vw, 64px);
+  }
+  .jobboard-card {
+    display: block;
+    border: 1px solid var(--hairline);
+    padding: 32px 28px;
+    transition: border-color 0.2s ease;
+  }
+  .jobboard-card:hover { border-color: var(--acid); text-decoration: none; }
+  .jobboard-eyebrow { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: var(--acid); margin-bottom: 10px; display: block; }
+  .jobboard-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(26px, 4.4vw, 38px); text-transform: uppercase; color: var(--white); margin-bottom: 8px; }
+  .jobboard-desc { font-size: 15px; color: var(--ash); max-width: 520px; }
+
   .close { max-width: 920px; margin: 0 auto; padding: 40px clamp(20px, 6vw, 64px) 140px; }
   .close p { color: var(--ash); max-width: 560px; }
 
@@ -89,13 +115,16 @@
 
 <nav class="nav">
   <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · WEB3, PLAINLY STATED</div>
-  <a class="author-link" href="part-00-author.html">AUTHOR →</a>
+  <div class="nav-links">
+    <a class="author-link" href="job-board.html">JOB BOARD →</a>
+    <a class="author-link" href="part-00-author.html">AUTHOR →</a>
+  </div>
 </nav>
 
 <header class="hero">
   <span class="eyebrow">THE COMPLETE GUIDE</span>
   <h1>Web3, Plainly<br>Stated.</h1>
-  <p class="sub">Twelve parts, one research vault. Mechanism first, every time. No hype, no filler, nothing you need a dictionary for.</p>
+  <p class="sub">Twelve core parts, one research vault, eight more in the Extension Pack. Mechanism first, every time. No hype, no filler, nothing you need a dictionary for.</p>
 </header>
 
 <div class="ticker-wrap">
@@ -105,7 +134,9 @@
     <span class="hit">DEFI</span><span>·</span><span>NFTS</span><span>·</span>
     <span class="hit">DAOS</span><span>·</span><span>TRADING</span><span>·</span>
     <span class="hit">CREATOR ECONOMY</span><span>·</span><span>SECURITY</span><span>·</span>
-    <span class="hit">THE FUTURE</span><span>·</span><span>THE VAULT</span>
+    <span class="hit">BRIDGES</span><span>·</span><span>ON-RAMPS</span><span>·</span>
+    <span class="hit">DEPIN</span><span>·</span><span>PRIVACY</span><span>·</span>
+    <span class="hit">REGULATION</span><span>·</span><span>PREDICTION MARKETS</span>
   </div>
 </div>
 
@@ -228,7 +259,93 @@
     </div>
     <span class="toc-arrow">→</span>
   </a>
+
+  <div class="tier-divider">
+    <span class="tier-label">THE EXTENSION PACK · CLOSED SET, PARTS 13-20</span>
+    <div class="tier-title">Past The Core Guide</div>
+    <div class="tier-desc">Eight more parts, the topics the core twelve didn't have room for. Same standard. Final ceiling, nothing added past Part 20.</div>
+  </div>
+
+  <a class="toc-item" href="part-13-bridges-and-interoperability.html">
+    <span class="toc-num">13</span>
+    <div class="toc-body">
+      <div class="toc-title">Bridges And Interoperability</div>
+      <div class="toc-desc">Wrapped assets and why bridges are the most hacked category in the industry.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-14-on-ramps-and-off-ramps.html">
+    <span class="toc-num">14</span>
+    <div class="toc-body">
+      <div class="toc-title">On-Ramps And Off-Ramps</div>
+      <div class="toc-desc">Getting fiat into crypto and back out. The wall most guides skip.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-15-depin-and-real-world-infrastructure.html">
+    <span class="toc-num">15</span>
+    <div class="toc-body">
+      <div class="toc-title">DePIN And Real World Infrastructure</div>
+      <div class="toc-desc">Wireless, compute, storage, paid for and coordinated on chain.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-16-privacy-tech.html">
+    <span class="toc-num">16</span>
+    <div class="toc-body">
+      <div class="toc-title">Privacy Tech</div>
+      <div class="toc-desc">Mixers, privacy coins, and the regulatory tension that follows them.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-17-derivatives-beyond-perps.html">
+    <span class="toc-num">17</span>
+    <div class="toc-body">
+      <div class="toc-title">Derivatives Beyond Perps</div>
+      <div class="toc-desc">Options, structured products, and on chain insurance.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-18-gaming-and-socialfi.html">
+    <span class="toc-num">18</span>
+    <div class="toc-body">
+      <div class="toc-title">Web3 Gaming And SocialFi</div>
+      <div class="toc-desc">Token incentives meeting entertainment, and why the first wave failed.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-19-regulation-and-compliance.html">
+    <span class="toc-num">19</span>
+    <div class="toc-body">
+      <div class="toc-title">Regulation And Compliance</div>
+      <div class="toc-desc">The global legal patchwork actually governing everything in this guide.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
+
+  <a class="toc-item" href="part-20-prediction-markets.html">
+    <span class="toc-num">20</span>
+    <div class="toc-body">
+      <div class="toc-title">Prediction Markets</div>
+      <div class="toc-desc">Information itself as the tradeable asset. The final part.</div>
+    </div>
+    <span class="toc-arrow">→</span>
+  </a>
 </main>
+
+<div class="jobboard-callout">
+  <a class="jobboard-card" href="job-board.html">
+    <span class="jobboard-eyebrow">SEPARATE FROM THE 20 PARTS · A GROWING DATABASE</span>
+    <div class="jobboard-title">The Job Board →</div>
+    <div class="jobboard-desc">Every real web3 job, explained plainly. What you do, what skills you need, how to actually start, how pay works. Searchable, and it keeps growing.</div>
+  </a>
+</div>
 
 <div class="close">
   <p>Read them in order if you're starting from zero. Jump straight to the vault if you're not. Either way, start with Part 01.</p>
