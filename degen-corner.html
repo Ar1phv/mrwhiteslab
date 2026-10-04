@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Degen Corner · Mr White's Lab</title>
+<meta name="description" content="Memecoins, airdrop farming, leverage culture, and sniping, explained plainly, with the real odds nobody posts.">
+<meta property="og:title" content="Degen Corner · Mr White's Lab">
+<meta property="og:description" content="Memecoins, airdrop farming, leverage culture, and sniping, explained plainly, with the real odds nobody posts.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Degen Corner · Mr White's Lab">
+<meta name="twitter:description" content="Memecoins, airdrop farming, leverage culture, and sniping, explained plainly, with the real odds nobody posts.">
+<meta name="twitter:image" content="og-cover.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --black: #0A0A0A; --panel: #121212; --ash: #8A8A85; --ash-dim: #55554F; --white: #F5F5F0; --acid: #B8FF00; --hairline: #232320; --red: #FF4D4D; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: var(--acid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+
+  .nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(20px, 6vw, 64px); background: rgba(10,10,10,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline); }
+  .nav-mark { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash); }
+  .nav-mark strong { color: var(--white); font-weight: 700; }
+  .nav a.index-link { display: inline-block; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: var(--ash); border-bottom: 1px solid var(--hairline); padding: 12px 4px; margin: -12px -4px; }
+  .nav a.index-link:hover { color: var(--acid); border-color: var(--acid); }
+
+  .hero { padding: clamp(50px, 10vh, 110px) clamp(20px, 6vw, 64px) 50px; max-width: 860px; margin: 0 auto; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.18em; color: var(--acid); margin-bottom: 24px; display: block; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(42px, 8.4vw, 96px); line-height: 0.92; text-transform: uppercase; margin-bottom: 20px; }
+  .hero .sub { font-size: clamp(17px, 2.2vw, 22px); color: var(--ash); max-width: 600px; }
+  .hero .lede { margin-top: 32px; font-size: 17px; color: var(--white); max-width: 620px; }
+  .hero .lede strong { color: var(--acid); font-weight: 600; }
+
+  .ticker-wrap { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 20px 0; overflow: hidden; background: var(--panel); }
+  .ticker { display: flex; gap: 44px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--ash-dim); padding-left: clamp(20px, 6vw, 64px); }
+  .ticker span.hit { color: var(--acid); }
+
+  .toc-nav { max-width: 860px; margin: 0 auto; padding: 40px clamp(20px, 6vw, 64px) 0; }
+  .toc-nav-label { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: var(--ash-dim); margin-bottom: 14px; display: block; }
+  .toc-nav-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .toc-nav-item { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash); border: 1px solid var(--hairline); padding: 8px 12px; }
+  .toc-nav-item:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+
+  .article { max-width: 860px; margin: 0 auto; padding: 70px clamp(20px, 6vw, 64px) 60px; }
+  section.block { margin-bottom: 84px; scroll-margin-top: 90px; }
+  section.block:last-of-type { margin-bottom: 60px; }
+  .block-mark { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: var(--ash-dim); display: block; margin-bottom: 16px; }
+  .block h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(27px, 4.2vw, 40px); text-transform: uppercase; line-height: 1.05; margin-bottom: 20px; max-width: 560px; }
+  .block p { font-size: 16.5px; color: #D8D8D2; margin-bottom: 15px; max-width: 640px; }
+  .block p strong { color: var(--white); font-weight: 600; }
+  .block p.callout { color: var(--white); font-size: 17px; padding-left: 20px; border-left: 2px solid var(--acid); margin: 26px 0; }
+  .block p.warning { color: var(--white); font-size: 16.5px; padding-left: 20px; border-left: 2px solid var(--red); margin: 26px 0; }
+  .term { color: var(--acid); font-family: 'Space Mono', monospace; font-weight: 700; font-style: normal; }
+
+  .diagram-wrap { border: 1px solid var(--hairline); background: var(--panel); padding: 22px clamp(14px, 4vw, 28px); margin: 26px 0; }
+  .diagram-label { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--ash-dim); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; display: block; }
+  .diagram-wrap svg { width: 100%; height: auto; display: block; }
+  .diagram-caption { font-size: 13px; color: var(--ash); margin-top: 14px; }
+
+  .data-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; background: var(--hairline); margin: 26px 0; border: 1px solid var(--hairline); }
+  .data-cell { background: var(--panel); padding: 20px 16px; }
+  .data-cell .num { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--acid); display: block; }
+  .data-cell .label { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--ash); letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .checklist { border: 1px solid var(--hairline); margin: 26px 0; }
+  .check-row { display: flex; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--hairline); align-items: flex-start; }
+  .check-row:last-child { border-bottom: none; }
+  .check-mark { font-family: 'Space Mono', monospace; color: var(--acid); font-size: 14px; padding-top: 2px; }
+  .check-text { font-size: 15px; color: #D8D8D2; }
+  .check-text strong { color: var(--white); }
+  .check-row.danger .check-mark { color: var(--red); }
+
+  .formula-box { border: 1px solid var(--hairline); background: var(--panel); padding: 20px 22px; margin: 24px 0; font-family: 'Space Mono', monospace; font-size: 14px; color: var(--acid); }
+  .formula-box .label { display: block; color: var(--ash-dim); font-size: 11px; letter-spacing: 0.08em; margin-bottom: 8px; text-transform: uppercase; }
+
+  .punchline { font-family: 'Space Mono', monospace; font-size: 16px; color: var(--acid); margin: 36px 0; padding: 22px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); max-width: 560px; }
+
+  .close { max-width: 860px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 64px) 120px; }
+  .close .signoff { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 5.2vw, 48px); text-transform: uppercase; line-height: 1.05; max-width: 600px; margin-bottom: 18px; }
+  .close .signoff .acid { color: var(--acid); }
+  .close p { color: var(--ash); max-width: 560px; margin-bottom: 32px; }
+  .next-link { display: inline-flex; align-items: center; gap: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--white); border: 1px solid var(--hairline); padding: 16px 22px; transition: border-color 0.2s ease, color 0.2s ease; }
+  .next-link:hover { border-color: var(--acid); color: var(--acid); text-decoration: none; }
+
+  footer { border-top: 1px solid var(--hairline); padding: 60px clamp(20px, 6vw, 64px) 40px; }
+  .footer-inner { max-width: 920px; margin: 0 auto; }
+  .footer-note { font-size: 15px; color: var(--ash); max-width: 620px; margin-bottom: 32px; line-height: 1.8; }
+  .footer-note strong { color: var(--white); }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { display: inline-block; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--white); border-bottom: 1px solid var(--hairline); padding: 10px 2px 12px; margin: -10px -2px -12px; }
+  .footer-links a:hover { color: var(--acid); border-color: var(--acid); text-decoration: none; }
+  .footer-bottom { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ash-dim); letter-spacing: 0.06em; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-mark"><strong>MR WHITE'S LAB</strong> · DEGEN CORNER</div>
+  <a class="index-link" href="index.html">← ALL PARTS</a>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">DEGEN CORNER · A STANDALONE REFERENCE</span>
+  <h1>The Odds Nobody<br>Posts.</h1>
+  <p class="sub">Memecoins, airdrop farming, leverage culture, and sniping, explained by mechanism. Then the real math, the part that gets left out of every highlight reel.</p>
+  <p class="lede">Every part of this site so far has been about understanding a mechanism before you touch it. This corner is no different, it's just covering the riskiest corner of the industry instead of the safest. <strong>Nothing here is a recommendation to do any of it.</strong> It's an explanation of how it actually works, and what it actually costs most people who try.</p>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="hit">MEMECOIN</span><span>·</span><span>BONDING CURVE</span><span>·</span>
+    <span class="hit">AIRDROP FARMING</span><span>·</span><span>SYBIL</span><span>·</span>
+    <span class="hit">LEVERAGE</span><span>·</span><span>LIQUIDATION</span><span>·</span>
+    <span class="hit">SNIPING</span><span>·</span><span>SURVIVORSHIP BIAS</span>
+  </div>
+</div>
+
+<nav class="toc-nav">
+  <span class="toc-nav-label">JUMP TO A SECTION</span>
+  <div class="toc-nav-grid">
+    <a class="toc-nav-item" href="#whatisdegen">What "Degen" Means</a>
+    <a class="toc-nav-item" href="#memecoins">Memecoin Mechanics</a>
+    <a class="toc-nav-item" href="#airdrops">Airdrop Farming</a>
+    <a class="toc-nav-item" href="#leverage">Leverage Culture</a>
+    <a class="toc-nav-item" href="#sniping">Sniping New Launches</a>
+    <a class="toc-nav-item" href="#redflags">Red Flags</a>
+    <a class="toc-nav-item" href="#math">The Math Nobody Posts</a>
+    <a class="toc-nav-item" href="#discipline">If You're Doing This Anyway</a>
+  </div>
+</nav>
+
+<main class="article">
+
+  <section class="block" id="whatisdegen">
+    <span class="block-mark">01 · WHAT "DEGEN" ACTUALLY MEANS</span>
+    <h2>Not an insult. A risk category you choose to enter.</h2>
+    <p>In this industry, <span class="term">degen</span> describes trading or allocating capital into the highest risk, least proven end of the market, new memecoins, unaudited launches, high leverage positions, on the understanding that the odds are bad and the potential loss is total. It's used as a badge, not a slur, people say it about themselves openly.</p>
+    <p>The useful distinction isn't whether degen activity is good or bad, it's whether the person doing it actually understands they've left the investing side of this industry entirely and entered something closer to a lottery ticket with better production values. Most of the damage in this corner of the market happens to people who didn't realize that's the game they were actually playing.</p>
+  </section>
+
+  <section class="block" id="memecoins">
+    <span class="block-mark">02 · MEMECOIN MECHANICS</span>
+    <h2>A joke with a bonding curve attached.</h2>
+    <p>A <span class="term">memecoin</span> is a token with no stated utility, no product, no roadmap, its entire value proposition is attention and momentum. Most launch on a <span class="term">bonding curve</span>, an automated pricing mechanism where the token's price rises mechanically as more people buy, with no presale, no team allocation in the simplest versions, anyone can buy from the first block.</p>
+
+    <div class="diagram-wrap">
+      <span class="diagram-label">Diagram · A Bonding Curve Launch</span>
+      <svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+        <line x1="20" y1="230" x2="580" y2="230" stroke="#232320" stroke-width="1"/>
+        <line x1="20" y1="230" x2="20" y2="20" stroke="#232320" stroke-width="1"/>
+        <path d="M 20 220 Q 300 210 450 120 T 580 30" fill="none" stroke="#B8FF00" stroke-width="2.5"/>
+        <text x="30" y="205" fill="#8A8A85" font-family="Space Mono, monospace" font-size="11">EARLY BUYERS, FLAT PRICE</text>
+        <text x="400" y="70" fill="#F5F5F0" font-family="Space Mono, monospace" font-size="11">PRICE ACCELERATES AS SUPPLY SELLS</text>
+        <text x="300" y="250" fill="#8A8A85" font-family="Space Mono, monospace" font-size="12" text-anchor="middle">SUPPLY SOLD →</text>
+      </svg>
+      <p class="diagram-caption">Price is mechanical, not based on any product. The earliest buyers on the flattest part of the curve have the most room below them. The latest buyers have almost none.</p>
+    </div>
+
+    <p>Once the curve fully sells out, many of these tokens migrate their liquidity to a standard decentralized exchange from Part 05, where normal AMM trading takes over. The overwhelming majority of tokens launched this way never reach that migration point at all, momentum dies, buyers stop coming, and the price simply sits at whatever point it stalled, permanently.</p>
+  </section>
+
+  <section class="block" id="airdrops">
+    <span class="block-mark">03 · AIRDROP FARMING</span>
+    <h2>Doing real work for a reward that may never arrive.</h2>
+    <p><span class="term">Airdrop farming</span> means using a protocol repeatedly, specifically because the team has hinted or confirmed a future token reward for early users, in hopes of qualifying for a meaningful allocation once it launches. This is a real, legitimate way people have earned significant value in this industry, several large token launches rewarded early users generously.</p>
+    <p>Protocols actively defend against <span class="term">sybil</span> farming, one person running hundreds of wallets to multiply their expected reward, using wallet clustering analysis and behavior pattern detection to disqualify accounts that look coordinated rather than organic. Getting flagged as a sybil farmer typically means zero allocation, after months of real gas fees spent trying to qualify.</p>
+    <p class="warning">There is no guarantee any given protocol ever launches a token at all, or that the reward is worth more than the gas fees and time spent farming it. Treat the gas fees and time as the real, certain cost, and the airdrop itself as a maybe, never the reverse.</p>
+  </section>
+
+  <section class="block" id="leverage">
+    <span class="block-mark">04 · LEVERAGE CULTURE</span>
+    <h2>Perpetuals from Part 08, pushed to the edge on purpose.</h2>
+    <p>High leverage trading, often 20x, 50x, sometimes 100x on perpetual contracts covered in Part 08, multiplies both gains and losses by that same factor. At high leverage, a move of just one or two percent against your position can trigger a full liquidation, your entire margin gone, not a partial loss.</p>
+
+    <div class="diagram-wrap">
+      <span class="diagram-label">Diagram · Liquidation Distance At Different Leverage</span>
+      <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+        <line x1="20" y1="30" x2="20" y2="190" stroke="#232320" stroke-width="1"/>
+        <line x1="20" y1="190" x2="580" y2="190" stroke="#232320" stroke-width="1"/>
+        <rect x="60" y="40" width="70" height="150" fill="#B8FF00"/>
+        <text x="95" y="210" fill="#8A8A85" font-family="Space Mono, monospace" font-size="12" text-anchor="middle">5x</text>
+        <text x="95" y="30" fill="#F5F5F0" font-family="Space Mono, monospace" font-size="11" text-anchor="middle">20% MOVE</text>
+        <rect x="200" y="140" width="70" height="50" fill="#8A8A85"/>
+        <text x="235" y="210" fill="#8A8A85" font-family="Space Mono, monospace" font-size="12" text-anchor="middle">20x</text>
+        <text x="235" y="130" fill="#F5F5F0" font-family="Space Mono, monospace" font-size="11" text-anchor="middle">5% MOVE</text>
+        <rect x="340" y="175" width="70" height="15" fill="#FF4D4D"/>
+        <text x="375" y="210" fill="#8A8A85" font-family="Space Mono, monospace" font-size="12" text-anchor="middle">100x</text>
+        <text x="375" y="165" fill="#F5F5F0" font-family="Space Mono, monospace" font-size="11" text-anchor="middle">1% MOVE</text>
+      </svg>
+      <p class="diagram-caption">Bar height is roughly how far price can move against you before liquidation. At 100x, a move smaller than the normal noise of most assets wipes the position.</p>
+    </div>
+
+    <p>Ordinary market volatility, the kind that happens constantly and means nothing on a spot chart, is frequently larger than the liquidation distance at these leverage levels. This isn't a tail risk you might encounter, it's closer to a near certainty over enough attempts, which is why sustained high leverage trading has one of the worst long run survival rates of anything covered on this entire site.</p>
+  </section>
+
+  <section class="block" id="sniping">
+    <span class="block-mark">05 · SNIPING NEW LAUNCHES</span>
+    <h2>Trying to be first, against bots built to always be first instead.</h2>
+    <p><span class="term">Sniping</span> means buying a new token in the first seconds or even the first block after it launches, trying to capture the lowest possible point on the bonding curve or earliest price. Manual snipers compete directly against automated sniping bots that submit transactions faster than any human can click, frequently paying extra priority fees specifically to win that first block, the same MEV dynamic covered in Part 08.</p>
+    <p>A meaningful share of new launches are also structured deliberately to extract value from snipers specifically, a team holding a large early allocation that dumps directly into the first wave of buyers the moment real demand shows up. Being fast doesn't protect you from being the exit liquidity for someone who was faster, and had a plan you couldn't see.</p>
+  </section>
+
+  <section class="block" id="redflags">
+    <span class="block-mark">06 · RED FLAGS ON A NEW LAUNCH</span>
+    <h2>The checklist from Part 10, run at actual launch speed.</h2>
+    <div class="checklist">
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Check the holder distribution immediately.</strong> A handful of wallets holding most of the supply this early is a direct setup for the dump described above.</div></div>
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Check if liquidity is actually locked.</strong> The exact rug pull mechanic from Part 10, now happening in minutes instead of months.</div></div>
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Check for a working, honest contract.</strong> Unlimited mint functions or hidden transfer taxes are common on fast, low effort launches specifically built to extract from degen flow.</div></div>
+      <div class="check-row danger"><span class="check-mark">⨯</span><div class="check-text"><strong>Never buy based on urgency alone.</strong> "Only going up from here" and "last chance before migration" are the exact phrases the setup from Part 09's scam section is built around.</div></div>
+    </div>
+  </section>
+
+  <section class="block" id="math">
+    <span class="block-mark">07 · THE MATH NOBODY POSTS</span>
+    <h2>You only see the screenshots of the trades that worked.</h2>
+    <p><span class="term">Survivorship bias</span> is the reason degen trading looks more winnable on social media than it actually is. Someone who turned five hundred dollars into fifty thousand posts that screenshot everywhere. The hundreds of people who made the same kind of bet and lost it all post nothing, they simply go quiet. The visible sample you're seeing is not a representative sample, it's filtered down to almost nothing but the outcomes that worked.</p>
+
+    <div class="data-strip">
+      <div class="data-cell"><span class="num">~</span><span class="label">The overwhelming majority of new memecoin launches never reach meaningful, lasting value</span></div>
+      <div class="data-cell"><span class="num">0</span><span class="label">Verified track record most anonymous "degen alpha" callers actually have</span></div>
+      <div class="data-cell"><span class="num">1</span><span class="label">Bad trade at high enough leverage is often enough to erase an account entirely</span></div>
+    </div>
+
+    <div class="formula-box">
+      <span class="label">Expected Value, Stated Plainly</span>
+      Expected value = (probability of winning × size of win) − (probability of losing × size of loss)<br>
+      A trade with a small win chance and a total loss on the downside needs an enormous payout on the rare win just to break even over many attempts, let alone turn a real long run profit.
+    </div>
+    <p>None of this means nobody ever wins in this corner of the market. People genuinely do. It means the honest way to think about it is closer to buying a lottery ticket you understand the odds of, not an investment you're executing a strategy on.</p>
+  </section>
+
+  <section class="block" id="discipline">
+    <span class="block-mark">08 · IF YOU'RE GOING TO DO THIS ANYWAY</span>
+    <h2>The same discipline from the TA Corner, just stricter here.</h2>
+    <p>If you choose to participate in this corner of the market with full awareness of the odds above, the position sizing rule from the TA Corner gets significantly stricter, not looser. Size every degen trade as money you've already mentally accepted as spent the moment you commit it, never money earmarked for anything that actually matters to your life.</p>
+    <div class="checklist">
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Never use leverage or borrowed capital for degen plays.</strong> The leverage math from this page and total loss risk from memecoins compound into something far worse than either alone.</div></div>
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Set a fixed, small, separate budget for this category only.</strong> Never top it up mid session chasing a loss, the exact revenge trading pattern covered in the TA Corner.</div></div>
+      <div class="check-row"><span class="check-mark">→</span><div class="check-text"><strong>Take real profit off the table when a position actually works.</strong> Moving the original stake back out once it's recovered means the rest is genuinely free risk, not just a number on a screen you're still afraid to lose.</div></div>
+    </div>
+    <p class="callout">The discipline covered across the TA Corner, position sizing, risk to reward, a trade journal, applies here with more force, not less. This is the highest variance corner of the entire site. Treat it with the most caution, not the least.</p>
+  </section>
+
+  <div class="punchline">Everyone posts the trade that worked. Almost nobody posts the ten that didn't. Do the math before you decide which post you're likely to be.</div>
+
+</main>
+
+<div class="close">
+  <p class="signoff">High variance<br>is real. So is<br>the <span class="acid">losing side</span>.</p>
+  <p>This reference sits outside the twenty part series, same as the Job Board and the TA Corner. Read the TA Corner's psychology section before this one if you haven't, it's the foundation everything here builds on.</p>
+  <a class="next-link" href="index.html">← BACK TO ALL PARTS</a>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-note">
+      This corner covered <strong>memecoin mechanics</strong>, <strong>airdrop farming</strong>, <strong>leverage culture</strong>, <strong>sniping</strong>, and the real odds behind all of it. Written by <strong>Mr White</strong>, operator at Outpost, builder of MARK Protocol and Verity. Not financial advice, not encouragement, just the mechanism and the math. No hype.
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/mrwhitecooks" target="_blank" rel="noopener">X · @mrwhitecooks</a>
+      <a href="https://t.me/mrwhiteslab3" target="_blank" rel="noopener">Telegram · mrwhiteslab3</a>
+      <a href="part-00-author.html">Author's Page</a>
+      <a href="ta-corner.html">TA Corner</a>
+      <a href="job-board.html">The Job Board</a>
+      <a href="index.html">All 20 Parts</a>
+    </div>
+    <div class="footer-bottom">MR WHITE'S LAB · DEGEN CORNER</div>
+  </div>
+</footer>
+
+</body>
+</html>
